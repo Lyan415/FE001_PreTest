@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="FE001 Pre-Test">
+<title>FE001 Pre-Test 紀錄</title>
+<style>
+:root{
+  --bg:#E8ECEF; --surface:#FFFFFF; --ink:#16232C; --muted:#5B6973; --line:#CBD3D9;
+  --plate:#1D2B35; --plate-ink:#F2F5F7;
+  --act:#1F5FA8; --act-soft:#E2ECF7;
+  --calc:#0D7A64; --calc-soft:#E1F1EC;
+  --yes:#1F7A3D; --yes-soft:#E1F2E6; --no:#A5312B; --no-soft:#F7E3E1;
+  --warn:#A9531A;
+  --r:10px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#11171B; --surface:#1A2228; --ink:#E5EBEE; --muted:#93A1AA; --line:#2E3A42;
+    --plate:#DCE4E9; --plate-ink:#11171B;
+    --act:#74ABEA; --act-soft:#1C2D40;
+    --calc:#52C8A9; --calc-soft:#14302A;
+    --yes:#62C982; --yes-soft:#16301F; --no:#F08A82; --no-soft:#3A1E1C;
+    --warn:#F0A066;
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
+  font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--act);outline-offset:2px}
+.num,.val,input.n,.plate,.ver{font-variant-numeric:tabular-nums}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:10px;padding:10px 14px;min-height:58px}
+.bar h1{font-size:17px;margin:0;font-weight:650;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ver{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:2px 7px;white-space:nowrap}
+.back{border:0;background:none;color:var(--act);font-size:17px;padding:6px 4px;min-height:44px}
+.bar .tid{font-weight:800;font-size:19px;letter-spacing:.01em}
+.bar .tname{font-size:13px;color:var(--muted);display:block;font-weight:500;overflow:hidden;text-overflow:ellipsis}
+
+main{max-width:760px;margin:0 auto;padding:12px 12px 40px}
+
+/* home */
+.tools{display:flex;gap:8px;margin:4px 0 14px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 14px;min-height:44px;font-size:15px}
+.btn.pri{background:var(--act);border-color:var(--act);color:#fff}
+@media (prefers-color-scheme: dark){.btn.pri{color:#0F1A26}}
+.btn.dng{color:var(--no)}
+.grp{margin:18px 0 6px;font-size:14px;color:var(--muted);font-weight:600}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.trow{display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;min-height:56px}
+.trow:last-child{border-bottom:0}
+.plate{flex:none;width:58px;text-align:center;background:var(--plate);color:var(--plate-ink);font-weight:800;font-size:16px;
+  border-radius:5px;padding:6px 0;letter-spacing:.02em;box-shadow:inset 0 0 0 2px rgba(255,255,255,.08)}
+.trow .nm{flex:1;min-width:0;font-size:14.5px;overflow-wrap:anywhere}
+.prog{flex:none;width:56px;text-align:right;font-size:12px;color:var(--muted)}
+.prog i{display:block;height:4px;border-radius:2px;background:var(--line);margin-top:4px;overflow:hidden}
+.prog i b{display:block;height:100%;background:var(--calc)}
+.prog.full{color:var(--calc);font-weight:700}
+
+/* test page */
+h2.sec{font-size:15px;margin:22px 2px 8px;font-weight:700}
+.ptab{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
+.ptab .cap{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;background:var(--act-soft);font-size:14px;font-weight:600}
+.ptab .cap .btn{min-height:34px;padding:4px 10px;font-size:13px}
+.prow{display:grid;grid-template-columns:52px minmax(0,1fr);gap:2px 10px;padding:9px 12px;border-top:1px solid var(--line)}
+.prow .pid{font-weight:700;font-size:14px}
+.prow .pd{font-size:14px}
+.prow .pd small{color:var(--muted)}
+.prow .pf{grid-column:2;display:flex;gap:8px;align-items:center;margin-top:4px}
+.prow .def{font-size:13px;color:var(--muted);flex:none;min-width:84px;overflow-wrap:anywhere;max-width:40%}
+.prow .def b{color:var(--ink);font-weight:600}
+.prow input.f{flex:1;min-width:0;width:auto;min-height:38px}
+.prow .mini{flex:none}
+.prow.changed .pid{color:var(--warn)}
+.mini{border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:4px 10px;min-height:36px;font-size:13px}
+
+input.f,textarea.f{border:1px solid var(--line);background:var(--bg);border-radius:7px;padding:8px 10px;min-height:42px;width:100%;font-size:16px}
+input.f:focus,textarea.f:focus{background:var(--surface)}
+textarea.f{min-height:70px;resize:vertical}
+
+.item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;margin-bottom:8px}
+.item .lab{font-size:14.5px;display:flex;gap:8px;align-items:baseline}
+.item .lab .no{color:var(--muted);font-size:12px;min-width:14px}
+.item .lab span.t{flex:1;overflow-wrap:anywhere}
+.item .notebtn{border:0;background:none;color:var(--muted);font-size:12px;padding:2px 4px;white-space:nowrap}
+.item .notebtn.has{color:var(--act);font-weight:600}
+.item .note{margin-top:8px}
+.colh{font-size:12px;font-weight:700;color:var(--muted);margin:8px 0 2px}
+.fld{margin-top:7px}
+.urow{display:flex;align-items:center;gap:8px}
+.urow input{flex:1}
+.unit{color:var(--muted);font-size:14px;white-space:nowrap}
+.secbar{margin:16px 2px 8px;padding:8px 10px;border-left:4px solid var(--act);background:var(--act-soft);border-radius:0 8px 8px 0;font-size:14px;font-weight:600}
+.gap{height:6px}
+
+/* time */
+.tv{font-size:18px;font-weight:600;letter-spacing:.01em;min-height:26px}
+.tv.empty{color:var(--muted);font-weight:400;font-size:15px}
+.tbtns{display:flex;gap:6px;margin-top:6px}
+.tbtns button{flex:1;min-height:42px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font-size:15px}
+.tbtns .now{background:var(--act);border-color:var(--act);color:#fff;font-weight:600}
+@media (prefers-color-scheme: dark){.tbtns .now{color:#0F1A26}}
+.ted{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;padding:8px;border:1px dashed var(--line);border-radius:8px}
+.ted .ok{grid-column:1/-1;display:flex;gap:6px}
+.ted .ok button{flex:1}
+.ted label{font-size:12px;color:var(--muted)}
+
+/* yes/no */
+.yn{display:flex;gap:6px;margin-top:6px}
+.yn button{flex:1;min-height:42px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font-size:15px}
+.yn button.on.y{background:var(--yes-soft);border-color:var(--yes);color:var(--yes);font-weight:700}
+.yn button.on.n{background:var(--no-soft);border-color:var(--no);color:var(--no);font-weight:700}
+.done{min-height:42px;width:100%;border-radius:8px;border:1px solid var(--line);background:var(--surface);margin-top:6px;font-size:15px}
+.done.on{background:var(--yes-soft);border-color:var(--yes);color:var(--yes);font-weight:700}
+
+/* composite */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.two .urow{gap:6px}
+.two .k{font-size:13px;color:var(--muted);white-space:nowrap}
+.cond{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+.cond label{display:flex;flex-direction:column;font-size:12px;color:var(--muted)}
+.cond input{min-height:38px;padding:6px 8px}
+
+/* calc */
+.calc{margin-top:6px;background:var(--calc-soft);border-radius:8px;padding:8px 10px}
+.calc .val{font-size:19px;font-weight:700;color:var(--calc)}
+.calc .val.pend{color:var(--muted);font-weight:500;font-size:15px}
+.calc .val small{font-size:13px;font-weight:500;opacity:.85}
+.calc .val.bad{color:var(--warn)}
+.calc .fx{font-size:12px;color:var(--muted);margin-top:2px}
+.calc .ynres.y{color:var(--yes)} .calc .ynres.n{color:var(--no)}
+
+.reftab{width:100%;border-collapse:collapse;font-size:13px}
+.reftab td,.reftab th{border-top:1px solid var(--line);padding:5px 12px;text-align:left}
+
+.nav{display:flex;gap:8px;margin-top:18px}
+.nav .btn{flex:1;color:var(--act)}
+.foot{margin-top:24px;text-align:center;font-size:12px;color:var(--muted)}
+.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:10px;background:var(--surface)}
+.seg button{flex:1;border:0;background:none;min-height:42px;font-size:15px}
+.seg button.on{background:var(--plate);color:var(--plate-ink);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:4px 11px;min-height:34px;font-size:13px}
+.chip.cfull{border-color:var(--calc);color:var(--calc);font-weight:700}
+.day{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 66px)}
+.dayhd{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:20px 2px 8px}
+.dno{font-weight:800;font-size:15px;letter-spacing:.06em;background:var(--act);color:#fff;border-radius:5px;padding:2px 8px}
+@media (prefers-color-scheme: dark){.dno{color:#0F1A26}}
+.dtt{font-weight:700;font-size:15.5px;flex:1;min-width:60%}
+.dmeta{font-size:12.5px;color:var(--muted);width:100%}
+.dnote{font-size:13px;color:var(--warn);margin:-2px 2px 8px}
+.trow .sub{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.trow .sub b{color:var(--ink)}
+.dayinfo{font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px 12px;margin-top:4px}
+.rules{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;font-size:13px}
+.rules summary{padding:10px 12px;font-weight:600;font-size:14px;cursor:pointer;min-height:44px;display:flex;align-items:center}
+.rules .rh{padding:6px 12px 2px;font-weight:700;color:var(--muted);font-size:12px}
+.rules .rl{display:flex;gap:10px;padding:6px 12px;border-top:1px solid var(--line)}
+.rules .rl b{flex:none;width:26px}
+.rules .rl i{font-style:normal;font-weight:600;display:block}
+.nbox{margin:0 2px 8px;padding:7px 10px;border:1px solid var(--warn);border-radius:8px;font-size:13px;color:var(--ink)}
+.dayinfo .nbox{margin:8px 0 0}
+.nbox b{display:block;color:var(--warn);font-size:12.5px}
+.tools{flex-wrap:wrap}
+.clip{font-size:12px;color:var(--act);white-space:nowrap}
+.att{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
+.attgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.thumb{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:0;overflow:hidden;display:flex;flex-direction:column;min-height:44px}
+.thumb img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+.thumb .fic{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--muted);font-size:14px}
+.thumb .tcap{font-size:11px;padding:3px 5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+.attbtns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.attbtns .btn{flex:1;text-align:center;display:flex;align-items:center;justify-content:center}
+.attnote{font-size:12px;margin-top:6px;white-space:normal}
+.nav .btn.dng{color:var(--no)}
+.viewer{position:fixed;inset:0;z-index:60;background:#0B0F12;color:#EEF2F4;display:flex;flex-direction:column;
+  padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+.viewer .vbar{display:flex;align-items:center;gap:10px;padding:8px 12px}
+.viewer .vname{font-size:13px;opacity:.8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.viewer .vbody{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:auto}
+.viewer .vbody img{max-width:100%;max-height:100%;object-fit:contain}
+.viewer .vfoot{padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.viewer .vfoot .f{background:#1A2228;color:#EEF2F4;border-color:#33414A}
+.viewer .vmeta{font-size:12px;opacity:.7}
+.viewer .btn{background:#1A2228;color:#EEF2F4;border-color:#33414A}
+.viewer .btn.dng{color:#F08A82}
+.sheet{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}
+.sbox{background:var(--surface);width:100%;max-width:520px;border-radius:14px 14px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}
+.stitle{font-weight:700;font-size:16px}
+.sname{font-size:14px;color:var(--muted);margin-bottom:4px;overflow-wrap:anywhere}
+.foot .btn{min-height:40px}
+.plate{width:auto;min-width:58px;padding:6px 6px}
+.trow.copyrow{background:var(--act-soft)}
+.trow.copyrow .plate{background:var(--act);color:#fff}
+@media (prefers-color-scheme: dark){.trow.copyrow .plate{color:#0F1A26}}
+.purpose{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--calc);border-radius:var(--r);padding:9px 12px;margin-top:4px;font-size:14px}
+.purpose .ph{font-size:12px;font-weight:700;color:var(--calc);letter-spacing:.04em}
+.purpose p{margin:2px 0 8px}
+.purpose p:last-child{margin-bottom:0}
+.copytag{font-size:13px;font-weight:700;color:var(--act);margin-bottom:6px}
+.dayinfo{margin-top:8px}
+.btn.cpy{color:var(--act);border-color:var(--act)}
+.smsg{font-size:14px;max-height:55vh;overflow:auto}
+.smsg p{margin:8px 0}
+.smsg .kv{font-size:13px;color:var(--muted);background:var(--bg);border-radius:8px;padding:8px 10px}
+.smsg ul.lost{margin:4px 0;padding-left:20px}
+.warnbox .stitle{color:var(--warn)}
+.btn.dngfill{background:var(--warn);border-color:var(--warn);color:#fff;font-weight:700}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--plate);color:var(--plate-ink);
+  padding:10px 16px;border-radius:8px;font-size:14px;z-index:50;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion: reduce){.toast{transition:none}}
+.proto{font-size:13px;color:var(--muted);margin:2px 0 4px}
+.rinse{margin-top:8px;gap:8px}
+.rinse .k{font-size:13px;color:var(--muted);flex:none}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+<script>
+const APP_VERSION = "1.0.0";
+const STORE_KEY = "fe001_pretest_data";
+document.title = `FE001 Pre-Test 紀錄 v${APP_VERSION}`;
+const DATA = [{"id": "A-1", "name": "PH501 P_HOLD_TEST", "params": [{"label": "Run 1 (connected to FE002)", "rows": [{"pid": "PP01", "desc": "Pressure Setpoint", "unit": "bar", "def": "1.5"}, {"pid": "PP02", "desc": "Pressure Hold Time", "unit": "min", "def": "90"}, {"pid": "PP03", "desc": "Acceptance Limit", "unit": "bar/h", "def": "0.02"}, {"pid": "PP04", "desc": "Release pressure", "unit": "bar", "def": "0.1"}, {"pid": "PP05", "desc": "Acceptance Limit in STABILIZATION", "unit": "bar", "def": "0.5"}, {"pid": "PP06", "desc": "Airflow Setpoint", "unit": "slpm", "def": "50"}, {"pid": "PP07", "desc": "Selection (0=FE002, 1= FE003)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Vessel Drain Time", "unit": "min", "def": "2"}, {"pid": "CP02", "desc": "Stabilization Time", "unit": "min", "def": "10"}, {"pid": "CP03", "desc": "Max Step Time PRESSURIZATION", "unit": "min", "def": "15"}, {"pid": "CP04", "desc": "Pressure Release Output", "unit": "%", "def": "70"}, {"pid": "CP05", "desc": "Jacket Drain Time", "unit": "min", "def": "1"}]}, {"label": "Run 2 (connected to FE003)", "rows": [{"pid": "PP01", "desc": "Pressure Setpoint", "unit": "bar", "def": "1.5"}, {"pid": "PP02", "desc": "Pressure Hold Time", "unit": "min", "def": "90"}, {"pid": "PP03", "desc": "Acceptance Limit", "unit": "bar/h", "def": "0.02"}, {"pid": "PP04", "desc": "Release pressure", "unit": "bar", "def": "0.1"}, {"pid": "PP05", "desc": "Acceptance Limit in STABILIZATION", "unit": "bar", "def": "0.5"}, {"pid": "PP06", "desc": "Airflow Setpoint", "unit": "slpm", "def": "50"}, {"pid": "PP07", "desc": "Selection (0=FE002, 1= FE003)", "unit": "#", "def": "1"}, {"pid": "CP01", "desc": "Vessel Drain Time", "unit": "min", "def": "2"}, {"pid": "CP02", "desc": "Stabilization Time", "unit": "min", "def": "10"}, {"pid": "CP03", "desc": "Max Step Time PRESSURIZATION", "unit": "min", "def": "15"}, {"pid": "CP04", "desc": "Pressure Release Output", "unit": "%", "def": "70"}, {"pid": "CP05", "desc": "Jacket Drain Time", "unit": "min", "def": "1"}]}], "rows": [{"t": "sec", "text": "Run 1 (connected to FE002)"}, {"t": "item", "no": "1", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "2", "name": "Pressure Hold Start Pressure", "note": true, "cols": [{"h": "", "type": "num", "unit": "bar"}]}, {"t": "item", "no": "3", "name": "Pressure Hold End Pressure", "note": true, "cols": [{"h": "", "type": "num", "unit": "bar"}]}, {"t": "item", "no": "4", "name": "Pressure Drop (Vessel)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"S": "A-1|r2|c0", "E": "A-1|r3|c0", "H": "P:A-1|P0|PP02"}, "parts": [{"expr": "S-E", "dp": 3, "unit": "bar"}, {"expr": "(S-E)/(H/60)", "dp": 4, "unit": "bar/h"}], "desc": "Pressure Drop = Start − End；bar/h = Drop ÷ (PP02 ÷ 60)"}}]}, {"t": "item", "no": "5", "name": "Pressure Drop (Transfer Line)", "note": true, "cols": [{"h": "Transfer Line 起始壓力", "type": "num", "unit": "bar"}, {"h": "Transfer Line 結束壓力", "type": "num", "unit": "bar"}, {"h": "Pressure Drop", "type": "calc", "calc": {"vars": {"S": "A-1|r5|c0", "E": "A-1|r5|c1", "H": "P:A-1|P0|PP02"}, "parts": [{"expr": "S-E", "dp": 3, "unit": "bar"}, {"expr": "(S-E)/(H/60)", "dp": 4, "unit": "bar/h"}], "desc": "Pressure Drop = Start − End；bar/h = Drop ÷ (PP02 ÷ 60)"}}]}, {"t": "item", "no": "6", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "7", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-1|r1|c0", "A-1|r6|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}, {"t": "sec", "text": "Run 2 (connected to FE003)"}, {"t": "item", "no": "1", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "2", "name": "Pressure Hold Start Pressure", "note": true, "cols": [{"h": "", "type": "num", "unit": "bar"}]}, {"t": "item", "no": "3", "name": "Pressure Hold End Pressure", "note": true, "cols": [{"h": "", "type": "num", "unit": "bar"}]}, {"t": "item", "no": "4", "name": "Pressure Drop (Vessel)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"S": "A-1|r10|c0", "E": "A-1|r11|c0", "H": "P:A-1|P1|PP02"}, "parts": [{"expr": "S-E", "dp": 3, "unit": "bar"}, {"expr": "(S-E)/(H/60)", "dp": 4, "unit": "bar/h"}], "desc": "Pressure Drop = Start − End；bar/h = Drop ÷ (PP02 ÷ 60)"}}]}, {"t": "item", "no": "5", "name": "Pressure Drop (Transfer Line)", "note": true, "cols": [{"h": "Transfer Line 起始壓力", "type": "num", "unit": "bar"}, {"h": "Transfer Line 結束壓力", "type": "num", "unit": "bar"}, {"h": "Pressure Drop", "type": "calc", "calc": {"vars": {"S": "A-1|r13|c0", "E": "A-1|r13|c1", "H": "P:A-1|P1|PP02"}, "parts": [{"expr": "S-E", "dp": 3, "unit": "bar"}, {"expr": "(S-E)/(H/60)", "dp": 4, "unit": "bar/h"}], "desc": "Pressure Drop = Start − End；bar/h = Drop ÷ (PP02 ÷ 60)"}}]}, {"t": "item", "no": "6", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "7", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-1|r9|c0", "A-1|r14|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}]}, {"id": "A-2", "name": "PH502 HEADER", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Stop Control (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "PP02", "desc": "Selection (0=Filters, 1=Additions, 2=Both)", "unit": "#", "def": "2"}]}], "rows": [{"t": "item", "no": "1", "name": "Phases that become executable only after this Phase is started", "note": false, "cols": [{"h": "", "type": "text"}]}, {"t": "item", "no": "2", "name": "Interlock Phases", "note": false, "cols": [{"h": "", "type": "text"}]}]}, {"id": "A-3", "name": "PH307 AIRBLOW_HEADER-01 (in FE003)", "params": [{"label": "", "rows": [{"pid": "CP01", "desc": "Airblow of Header Line", "unit": "sec", "def": "30"}]}], "rows": [{"t": "item", "no": "1", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "2", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "3", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-3|r0|c0", "A-3|r1|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}]}, {"id": "A-4", "name": "PH101-SIP_EMPTY_VESSEL", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Sterilization Time", "unit": "min", "def": "30"}, {"pid": "PP02", "desc": "Sterilization Time Max", "unit": "min", "def": "90"}, {"pid": "PP03", "desc": "Sterilization Temperature", "unit": "°C", "def": "123"}, {"pid": "PP04", "desc": "MFC selection (0=Air, 1=N2)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Jacket Drain Time", "unit": "min", "def": "1"}, {"pid": "CP02", "desc": "Vessel Drain Time", "unit": "min", "def": "2"}, {"pid": "CP03", "desc": "Pressure Setpoint", "unit": "bar", "def": "1.5"}, {"pid": "CP04", "desc": "Low Alarm Threshold Vessel", "unit": "°C", "def": "121.1"}, {"pid": "CP05", "desc": "Low Alarm Threshold Condensate", "unit": "°C", "def": "121.1"}, {"pid": "CP06", "desc": "Transition Temperature HEAT_1", "unit": "°C", "def": "98"}, {"pid": "CP07", "desc": "Max Steptime HEAT_1", "unit": "min", "def": "60"}, {"pid": "CP08", "desc": "Evacuation Time", "unit": "sec", "def": "30"}, {"pid": "CP09", "desc": "Max Steptime HEAT_2", "unit": "min", "def": "60"}, {"pid": "CP10", "desc": "Transition Temperature Fill_Jacket", "unit": "°C", "def": "80"}, {"pid": "CP11", "desc": "Max Steptime Fill_Jacket", "unit": "min", "def": "60"}, {"pid": "CP12", "desc": "Transition Temperature COOL", "unit": "°C", "def": "37"}, {"pid": "CP13", "desc": "Max Steptime COOL", "unit": "min", "def": "60"}, {"pid": "CP14", "desc": "Sterilization Hold Temperature", "unit": "°C", "def": "120.9"}, {"pid": "CP15", "desc": "Evacuation Release Pressure Output", "unit": "%", "def": "60"}, {"pid": "CP16", "desc": "Pressure Low Limit", "unit": "bar", "def": "1"}, {"pid": "CP17", "desc": "Stabilization Time", "unit": "min", "def": "2"}, {"pid": "CP18", "desc": "Air Flow Setpoint", "unit": "slpm", "def": "50"}, {"pid": "CP19", "desc": "Vessel Drain Volume", "unit": "kg", "def": "1"}, {"pid": "CP20", "desc": "Nitrogen Flow Setpoint", "unit": "slpm", "def": "12"}, {"pid": "CP21", "desc": "Steam Flushing Timer", "unit": "min", "def": "5"}, {"pid": "CP22", "desc": "Transition Time COOL", "unit": "min", "def": "3"}]}], "rows": [{"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT_1 Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT_1 End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT_1 Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-4|r1|c0", "A-4|r2|c0"], "fmt": "mmss", "desc": "HEAT_1 End Time − HEAT_1 Start Time"}}]}, {"t": "item", "no": "", "name": "HEAT_2 Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT_2 End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT_2 Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-4|r4|c0", "A-4|r5|c0"], "fmt": "mmss", "desc": "HEAT_2 End Time − HEAT_2 Start Time"}}]}, {"t": "sec", "text": "Was each thermometer at or above 121.0 °C for more than 15 minutes?"}, {"t": "item", "no": "", "name": "TE142 (Vessel)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE606 (Filter F-600)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE616 (Filter F-610)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE506 (Filter F-500)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE546 (Gas Inlet)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE104 (Bottom Valve)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE722 (Inoc Line)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE712 (Methanol/ Media Transfer Line)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE766 (Feed)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE125 (Sampling Valve)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "sec", "text": "Confirm the Pulse setting"}, {"t": "item", "no": "", "name": "Attach the Pulse Valve Timing Table", "note": true, "cols": [{"h": "", "type": "done"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-4|r0|c0", "A-4|r20|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}]}, {"id": "A-5", "name": "Calibrate pH", "params": [], "rows": [{"t": "item", "no": "", "name": "Calibration start time", "note": false, "cols": [{"h": "AE144", "type": "time"}, {"h": "AE145", "type": "time"}]}, {"t": "item", "no": "", "name": "Calibration end time", "note": false, "cols": [{"h": "AE144", "type": "time"}, {"h": "AE145", "type": "time"}]}, {"t": "item", "no": "", "name": "Z value (pH)", "note": false, "cols": [{"h": "AE144", "type": "num", "unit": "pH"}, {"h": "AE145", "type": "num", "unit": "pH"}]}, {"t": "item", "no": "", "name": "S value (Slope) %", "note": false, "cols": [{"h": "AE144", "type": "num", "unit": "%"}, {"h": "AE145", "type": "num", "unit": "%"}]}, {"t": "item", "no": "", "name": "Calibration time (min)", "note": false, "cols": [{"h": "AE144", "type": "calc", "calc": {"dur": ["A-5|r0|c0", "A-5|r1|c0"], "fmt": "min", "desc": "Calibration end time − Calibration start time"}}, {"h": "AE145", "type": "calc", "calc": {"dur": ["A-5|r0|c1", "A-5|r1|c1"], "fmt": "min", "desc": "Calibration end time − Calibration start time"}}]}, {"t": "item", "no": "", "name": "Installed on the vessel", "note": false, "cols": [{"h": "AE144", "type": "yn"}, {"h": "AE145", "type": "yn"}]}]}, {"id": "A-6", "name": "PH102-SIP_FULL_VESSEL", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Sterilization Time", "unit": "min", "def": "30"}, {"pid": "PP02", "desc": "Sterilization Time Max", "unit": "min", "def": "90"}, {"pid": "PP03", "desc": "Sterilization Temperature", "unit": "°C", "def": "123"}, {"pid": "PP04", "desc": "MFC selection (0=Air, 1=N2)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Jacket Drain Time", "unit": "min", "def": "1"}, {"pid": "CP02", "desc": "Agitator Setpoint", "unit": "rpm", "def": "400"}, {"pid": "CP03", "desc": "Pressure Setpoint", "unit": "bar", "def": "1.5"}, {"pid": "CP04", "desc": "Low Alarm Threshold Vessel", "unit": "°C", "def": "122"}, {"pid": "CP05", "desc": "Low Alarm Threshold Condensate", "unit": "°C", "def": "121"}, {"pid": "CP06", "desc": "Transition Temperature HEAT_1", "unit": "°C", "def": "98"}, {"pid": "CP07", "desc": "Max Steptime HEAT_1", "unit": "min", "def": "60"}, {"pid": "CP08", "desc": "Evacuation Time", "unit": "sec", "def": "30"}, {"pid": "CP09", "desc": "Max Steptime HEAT_2", "unit": "min", "def": "60"}, {"pid": "CP10", "desc": "Transition Temperature Fill_Jacket", "unit": "°C", "def": "80"}, {"pid": "CP11", "desc": "Max Steptime Fill_Jacket", "unit": "min", "def": "45"}, {"pid": "CP12", "desc": "Transition Temperature COOL", "unit": "°C", "def": "37"}, {"pid": "CP13", "desc": "Max Steptime COOL", "unit": "min", "def": "120"}, {"pid": "CP14", "desc": "Sterilization Hold Temperature", "unit": "°C", "def": "120"}, {"pid": "CP15", "desc": "Evacuation Release Pressure Output", "unit": "%", "def": "70"}, {"pid": "CP16", "desc": "Pressure Low Limit", "unit": "bar", "def": "0.5"}, {"pid": "CP17", "desc": "Stabilization Time", "unit": "min", "def": "2"}, {"pid": "CP18", "desc": "Air Flow Setpoint", "unit": "slpm", "def": "50"}, {"pid": "CP19", "desc": "Nitrogen Flow Setpoint", "unit": "slpm", "def": "12"}]}], "rows": [{"t": "item", "no": "", "name": "Vessel Weight", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT_1 Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT_1 End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT_1 Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-6|r2|c0", "A-6|r3|c0"], "fmt": "mmss", "desc": "HEAT_1 End Time − HEAT_1 Start Time"}}]}, {"t": "item", "no": "", "name": "HEAT_2 Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT_2 End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT_2 Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-6|r5|c0", "A-6|r6|c0"], "fmt": "mmss", "desc": "HEAT_2 End Time − HEAT_2 Start Time"}}]}, {"t": "sec", "text": "Was each thermometer at or above 121.0 °C for more than 15 minutes?"}, {"t": "item", "no": "", "name": "TE142 (Vessel)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE606 (Filter F-600)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE616 (Filter F-610)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE506 (Filter F-500)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE546 (Gas Inlet)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE104 (Bottom Valve)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE722 (Inoc Line)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE712 (Methanol/ Media Transfer Line)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE766 (Feed)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE125 (Sampling Valve)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "sec", "text": "Confirm the Pulse setting"}, {"t": "item", "no": "", "name": "Attach the Pulse Valve Timing Table", "note": true, "cols": [{"h": "", "type": "done"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-6|r1|c0", "A-6|r21|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}]}, {"id": "A-7", "name": "PH103-SIP_SAMPLE", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Sterilization Time", "unit": "min", "def": "20"}, {"pid": "PP02", "desc": "Sterilization Time Max", "unit": "min", "def": "30"}, {"pid": "PP03", "desc": "Sterilization Temperature", "unit": "°C", "def": "123"}, {"pid": "CP01", "desc": "Low Alarm Threshold Condensate", "unit": "°C", "def": "121"}, {"pid": "CP02", "desc": "Max Steptime HEAT", "unit": "min", "def": "30"}, {"pid": "CP03", "desc": "Transition Time COOL", "unit": "min", "def": "2"}, {"pid": "CP04", "desc": "Sterilization Hold Temperature", "unit": "°C", "def": "120.9"}, {"pid": "CP05", "desc": "Stabilization Time", "unit": "min", "def": "2"}]}], "rows": [{"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "STRI Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-7|r1|c0", "A-7|r2|c0"], "fmt": "mmss", "desc": "STRI Start Time − HEAT Start Time"}}]}, {"t": "sec", "text": "Was each thermometer at or above 121.0 °C for more than 15 minutes?"}, {"t": "item", "no": "", "name": "TE125 (Sample)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "sec", "text": "Confirm the Pulse setting"}, {"t": "item", "no": "", "name": "Attach the Pulse Valve Timing Table", "note": true, "cols": [{"h": "", "type": "done"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-7|r0|c0", "A-7|r8|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}]}, {"id": "A-8", "name": "PH104-SIP_FBV", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Sterilization Time", "unit": "min", "def": "20"}, {"pid": "PP02", "desc": "Sterilization Time Max", "unit": "min", "def": "30"}, {"pid": "PP03", "desc": "Sterilization Temperature", "unit": "°C", "def": "123"}, {"pid": "CP01", "desc": "Low Alarm Threshold Condensate", "unit": "°C", "def": "121"}, {"pid": "CP02", "desc": "Max Steptime HEAT", "unit": "min", "def": "30"}, {"pid": "CP03", "desc": "Transition Time COOL", "unit": "min", "def": "2"}, {"pid": "CP04", "desc": "Sterilization Hold Temperature", "unit": "°C", "def": "120"}, {"pid": "CP05", "desc": "Stabilization Time", "unit": "min", "def": "2"}]}], "rows": [{"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "STRI Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-8|r1|c0", "A-8|r2|c0"], "fmt": "mmss", "desc": "STRI Start Time − HEAT Start Time"}}]}, {"t": "sec", "text": "Was each thermometer at or above 121.0 °C for more than 15 minutes?"}, {"t": "item", "no": "", "name": "TE104 (FBV)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "sec", "text": "Confirm the Pulse setting"}, {"t": "item", "no": "", "name": "Attach the Pulse Valve Timing Table", "note": true, "cols": [{"h": "", "type": "done"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-8|r0|c0", "A-8|r8|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}]}, {"id": "A-9", "name": "PH109-SIP_MeOH_MEDIA_PORT", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Sterilization Time", "unit": "min", "def": "20"}, {"pid": "PP02", "desc": "Sterilization Time Max", "unit": "min", "def": "30"}, {"pid": "PP03", "desc": "Sterilization Temperature", "unit": "°C", "def": "123"}, {"pid": "CP01", "desc": "Low Alarm Threshold Condensate", "unit": "°C", "def": "121"}, {"pid": "CP02", "desc": "Max Steptime HEAT", "unit": "min", "def": "30"}, {"pid": "CP03", "desc": "Transition Time COOL", "unit": "min", "def": "2"}, {"pid": "CP04", "desc": "Sterilization Hold Temperature", "unit": "°C", "def": "120"}, {"pid": "CP05", "desc": "Stabilization Time", "unit": "min", "def": "2"}]}], "rows": [{"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "STRI Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-9|r1|c0", "A-9|r2|c0"], "fmt": "mmss", "desc": "STRI Start Time − HEAT Start Time"}}]}, {"t": "sec", "text": "Was each thermometer at or above 121.0 °C for more than 15 minutes?"}, {"t": "item", "no": "", "name": "TE712 (Methanol/ Media Transfer Line)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "sec", "text": "Confirm the Pulse setting"}, {"t": "item", "no": "", "name": "Attach the Pulse Valve Timing Table", "note": true, "cols": [{"h": "", "type": "done"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-9|r0|c0", "A-9|r8|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}]}, {"id": "A-10", "name": "PH110-SIP_FEED_PORT", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Sterilization Time", "unit": "min", "def": "20"}, {"pid": "PP02", "desc": "Sterilization Time Max", "unit": "min", "def": "30"}, {"pid": "PP03", "desc": "Sterilization Temperature", "unit": "°C", "def": "123"}, {"pid": "CP01", "desc": "Low Alarm Threshold Condensate", "unit": "°C", "def": "121"}, {"pid": "CP02", "desc": "Max Steptime HEAT", "unit": "min", "def": "30"}, {"pid": "CP03", "desc": "Transition Time COOL", "unit": "min", "def": "2"}, {"pid": "CP04", "desc": "Sterilization Hold Temperature", "unit": "°C", "def": "120"}, {"pid": "CP05", "desc": "Stabilization Time", "unit": "min", "def": "2"}]}], "rows": [{"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "STRI Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-10|r1|c0", "A-10|r2|c0"], "fmt": "mmss", "desc": "STRI Start Time − HEAT Start Time"}}]}, {"t": "sec", "text": "Was each thermometer at or above 121.0 °C for more than 15 minutes?"}, {"t": "item", "no": "", "name": "TE766 (Feed)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "sec", "text": "Confirm the Pulse setting"}, {"t": "item", "no": "", "name": "Attach the Pulse Valve Timing Table", "note": true, "cols": [{"h": "", "type": "done"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-10|r0|c0", "A-10|r8|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}]}, {"id": "A-11", "name": "PH108-SIP_INOC_PORT", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Sterilization Time", "unit": "min", "def": "20"}, {"pid": "PP02", "desc": "Sterilization Time Max", "unit": "min", "def": "30"}, {"pid": "PP03", "desc": "Sterilization Temperature", "unit": "°C", "def": "123"}, {"pid": "CP01", "desc": "Low Alarm Threshold Condensate", "unit": "°C", "def": "121"}, {"pid": "CP02", "desc": "Max Steptime HEAT", "unit": "min", "def": "30"}, {"pid": "CP03", "desc": "Transition Time COOL", "unit": "min", "def": "2"}, {"pid": "CP04", "desc": "Sterilization Hold Temperature", "unit": "°C", "def": "120"}, {"pid": "CP05", "desc": "Stabilization Time", "unit": "min", "def": "2"}]}], "rows": [{"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "STRI Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-11|r1|c0", "A-11|r2|c0"], "fmt": "mmss", "desc": "STRI Start Time − HEAT Start Time"}}]}, {"t": "sec", "text": "Was each thermometer at or above 121.0 °C for more than 15 minutes?"}, {"t": "item", "no": "", "name": "TE722 (Inoc Line)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "sec", "text": "Confirm the Pulse setting"}, {"t": "item", "no": "", "name": "Attach the Pulse Valve Timing Table", "note": true, "cols": [{"h": "", "type": "done"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-11|r0|c0", "A-11|r8|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}]}, {"id": "A-12", "name": "PH411-DATA_RECORDING", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Stop Control (0=No, 1=Yes)", "unit": "#", "def": "0"}]}], "rows": [{"t": "sec", "text": "Confirm whether the following parameters appear in the PH411 report"}, {"t": "item", "no": "", "name": "TIC142.SP", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TIC142.PV", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "SIC130.SP", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "SIC130.PV", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "PIC150.SP", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "PIC150.PV", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "AIC144.SP", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "AIC144.PV", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "AIC146.SP", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "AIC146.PV", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "WIC156.PV", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TIC342.PV", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "FIC568.SP", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "FIC568.PV", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "FIC578.SP", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "FIC578.PV", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "FIC598.SP", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "FIC598.PV", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "WI800.PV", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "WI830.PV", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "WI860.PV", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "", "note": true, "cols": [{"h": "", "type": "freeyn"}]}, {"t": "item", "no": "", "name": "", "note": true, "cols": [{"h": "", "type": "freeyn"}]}, {"t": "item", "no": "", "name": "", "note": true, "cols": [{"h": "", "type": "freeyn"}]}, {"t": "item", "no": "", "name": "", "note": true, "cols": [{"h": "", "type": "freeyn"}]}, {"t": "item", "no": "", "name": "", "note": true, "cols": [{"h": "", "type": "freeyn"}]}]}, {"id": "A-13", "name": "PH402-CTRL_AGITATOR", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Agitator Setpoint", "unit": "rpm", "def": "400"}, {"pid": "PP02", "desc": "Stop Control (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "PP03", "desc": "Mode (0=AUTO, 1=CASC)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Alarm Delay", "unit": "sec", "def": "60"}, {"pid": "CP02", "desc": "Alarm Low Low Deviation", "unit": "rpm", "def": "20"}, {"pid": "CP03", "desc": "Warning Low Deviation", "unit": "rpm", "def": "10"}, {"pid": "CP04", "desc": "Warning High Deviation", "unit": "rpm", "def": "10"}, {"pid": "CP05", "desc": "Alarm High High Deviation", "unit": "rpm", "def": "20"}]}], "rows": [{"t": "item", "no": "", "name": "Agitator speed after Phase start (rpm)", "note": true, "cols": [{"h": "", "type": "num", "unit": "rpm"}]}]}, {"id": "A-14", "name": "PH401-CTRL_TEMPERATURE", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Temperature Setpoint", "unit": "°C", "def": "37"}, {"pid": "PP02", "desc": "Stop Control (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Alarm Delay", "unit": "min", "def": "60"}, {"pid": "CP02", "desc": "Alarm Low Low Deviation", "unit": "°C", "def": "2"}, {"pid": "CP03", "desc": "Warning Low Deviation", "unit": "°C", "def": "1"}, {"pid": "CP04", "desc": "Warning High Deviation", "unit": "°C", "def": "1"}, {"pid": "CP05", "desc": "Alarm High High Deviation", "unit": "°C", "def": "2"}, {"pid": "CP06", "desc": "Jacket Timer Elapsed", "unit": "min", "def": "2"}]}], "rows": [{"t": "item", "no": "", "name": "Temperature before Phase start (TE142)", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Vessel weight before Phase start", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "sec", "text": "Set temperature = 37 °C（PP01）"}, {"t": "item", "no": "", "name": "Time TE142 first reaches the set temperature", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Time needed to first reach the set temperature", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-14|r2|c0", "A-14|r4|c0"], "fmt": "hms", "desc": "Time TE142 first reaches the set temperature − Phase Start Time"}}]}, {"t": "item", "no": "", "name": "Highest temperature within 3 minutes after first reaching the set temperature", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Lowest temperature within 3 minutes after first reaching the set temperature", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Temperature deviation within 3 minutes after first reaching the set temperature", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"H": "A-14|r6|c0", "L": "A-14|r7|c0", "SP": "P:A-14|P0|PP01"}, "parts": [{"expr": "H-SP", "dp": 2, "unit": "°C", "label": "最高"}, {"expr": "L-SP", "dp": 2, "unit": "°C", "label": "最低"}], "sign": true, "desc": "最高 − 設定溫度；最低 − 設定溫度（設定溫度 = PP01）"}}]}, {"t": "item", "no": "", "name": "Vessel weight", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Highest temperature from 3 to 15 minutes after first reaching the set temperature", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Lowest temperature from 3 to 15 minutes after first reaching the set temperature", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Temperature deviation from 3 to 15 minutes after first reaching the set temperature", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"H": "A-14|r10|c0", "L": "A-14|r11|c0", "SP": "P:A-14|P0|PP01"}, "parts": [{"expr": "H-SP", "dp": 2, "unit": "°C", "label": "最高"}, {"expr": "L-SP", "dp": 2, "unit": "°C", "label": "最低"}], "sign": true, "desc": "最高 − 設定溫度；最低 − 設定溫度（設定溫度 = PP01）"}}]}]}, {"id": "A-15", "name": "PH404-CTRL_pH", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "pH Setpoint", "unit": "pH", "def": "8"}, {"pid": "PP02", "desc": "Stop Control (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "PP03", "desc": "Selection Acid (0=No, 1=Yes)", "unit": "#", "def": "1"}, {"pid": "PP04", "desc": "Selection Base (0=No, 1=Yes)", "unit": "#", "def": "1"}, {"pid": "CP01", "desc": "Alarm Delay", "unit": "min", "def": "60"}, {"pid": "CP02", "desc": "Alarm Low Low Deviation", "unit": "pH", "def": "0.4"}, {"pid": "CP03", "desc": "Warning Low Deviation", "unit": "pH", "def": "0.2"}, {"pid": "CP04", "desc": "Warning High Deviation", "unit": "pH", "def": "0.2"}, {"pid": "CP05", "desc": "Alarm High High Deviation", "unit": "pH", "def": "0.4"}]}], "rows": [{"t": "item", "no": "", "name": "pH before Phase run", "note": true, "cols": [{"h": "", "type": "num", "unit": "pH"}]}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Time pH reaches 8.0", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "pH after stabilization", "note": true, "cols": [{"h": "", "type": "num", "unit": "pH"}]}, {"t": "item", "no": "", "name": "1 M NaOH used", "note": true, "cols": [{"h": "", "type": "num"}]}, {"t": "item", "no": "", "name": "PID settings", "note": true, "cols": [{"h": "", "type": "text"}]}]}, {"id": "A-16", "name": "PH302-CIP_RECIRCULATION", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Agitator Setpoint", "unit": "rpm", "def": "400"}, {"pid": "PP02", "desc": "Weight High Alarm", "unit": "kg", "def": "45"}, {"pid": "PP03", "desc": "Pressure High Alarm", "unit": "bar", "def": "1"}, {"pid": "PP04", "desc": "CIP Recirculation Counts", "unit": "#", "def": "2"}, {"pid": "PP05", "desc": "CIP Line Pressure Setpoint", "unit": "bar", "def": "1"}, {"pid": "PP06", "desc": "CIP Recirculation Temperature", "unit": "°C", "def": "60"}, {"pid": "PP07", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "2"}, {"pid": "PP08", "desc": "CIP Pump Setpoint", "unit": "%", "def": "50"}, {"pid": "PP09", "desc": "Vessel Drain Setpoint", "unit": "kg", "def": "5"}, {"pid": "CP01", "desc": "CIP ALL FILTERS", "unit": "sec", "def": "20"}, {"pid": "CP02", "desc": "CIP ALL ADDITIONALS", "unit": "sec", "def": "20"}, {"pid": "CP03", "desc": "CIP ALL SPRAYBALLS", "unit": "sec", "def": "30"}, {"pid": "CP04", "desc": "Max Steptime HEAT", "unit": "min", "def": "60"}, {"pid": "CP05", "desc": "Temp Alarm Low Low Deviation", "unit": "°C", "def": "5"}, {"pid": "CP06", "desc": "Stabilization Time", "unit": "sec", "def": "60"}, {"pid": "CP07", "desc": "Steptime GRAVITY_DRAIN", "unit": "min", "def": "3"}, {"pid": "CP08", "desc": "CIP of Transfer Line", "unit": "sec", "def": "20"}]}], "rows": [{"t": "item", "no": "", "name": "Vessel weight before Phase start", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Vessel weight after HEAT starts", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Piping volume", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"B": "A-16|r0|c0", "A": "A-16|r3|c0"}, "parts": [{"expr": "B-A", "dp": 2, "unit": "kg"}], "desc": "Vessel weight before Phase start − Vessel weight after HEAT starts"}}]}, {"t": "item", "no": "", "name": "HEAT Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "mmss"}]}, {"t": "item", "no": "", "name": "Temperature after HEAT ends (TE142)", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-16|r1|c0", "A-16|r7|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}]}, {"id": "A-17", "name": "PH304-CIP_AIRBLOW", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Airblow Drain Selection (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "PP02", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "0"}, {"pid": "PP03", "desc": "Airblow Selection (0=FE002, 1= FE003)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Airblow ALL FILTERS", "unit": "sec", "def": "20"}, {"pid": "CP02", "desc": "Airblow ALL ADDITIONALS", "unit": "sec", "def": "20"}, {"pid": "CP03", "desc": "Airblow ALL SPRAYBALLS", "unit": "sec", "def": "20"}, {"pid": "CP04", "desc": "Airblow Vessel", "unit": "sec", "def": "30"}, {"pid": "CP05", "desc": "Airblow Transfer Line", "unit": "sec", "def": "20"}, {"pid": "CP06", "desc": "Airblow WFI Line", "unit": "sec", "def": "20"}]}], "rows": [{"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["A-17|r0|c0", "A-17|r1|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}, {"t": "item", "no": "", "name": "Is there visible standing water in the vessel?", "note": true, "cols": [{"h": "", "type": "yn"}]}]}, {"id": "A-18", "name": "PH301-CIP_ONCE_THROUGH", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Rinse Selection (0=Ambient WFI, 1=Hot WFI)", "unit": "#", "def": "0"}, {"pid": "PP02", "desc": "Agitator Setpoint", "unit": "rpm", "def": "400"}, {"pid": "PP03", "desc": "Weight High Alarm", "unit": "kg", "def": "45"}, {"pid": "PP04", "desc": "Pressure High Alarm", "unit": "bar", "def": "1"}, {"pid": "PP05", "desc": "CIP Pump Setpoint for all Filters", "unit": "%", "def": "40"}, {"pid": "PP06", "desc": "CIP Pump Setpoint for all Additional ports", "unit": "%", "def": "50"}, {"pid": "PP07", "desc": "CIP Pump Setpoint for all Sprayballs", "unit": "%", "def": "60"}, {"pid": "PP08", "desc": "CIP Counts", "unit": "#", "def": "1"}, {"pid": "PP09", "desc": "CIP Drain Selection (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "PP10", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "2"}, {"pid": "PP11", "desc": "Selection (0=FE002, 1=FE003)", "unit": "#", "def": "0"}, {"pid": "PP12", "desc": "Minimum Vessel volume", "unit": "kg", "def": "25"}, {"pid": "PP13", "desc": "Maximum Vessel volume", "unit": "kg", "def": "45"}, {"pid": "CP01", "desc": "CIP ALL FILTERS", "unit": "sec", "def": "300"}, {"pid": "CP02", "desc": "CIP ALL ADDITIONALS", "unit": "sec", "def": "300"}, {"pid": "CP03", "desc": "CIP ALL SPRAYBALLS", "unit": "sec", "def": "300"}, {"pid": "CP04", "desc": "CIP AGITATOR", "unit": "sec", "def": "300"}, {"pid": "CP05", "desc": "CIP of Transfer Line", "unit": "sec", "def": "300"}, {"pid": "CP06", "desc": "Steptime GRAVITY_DRAIN", "unit": "min", "def": "5"}]}], "rows": [{"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Step 210 CIP_EXHAUST_1 conductivity reading", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Step 220 CIP_EXHAUST_2 conductivity reading", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Step 230 CIP_OVERLAY conductivity reading", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Step 240 CIP_SPARGER conductivity reading", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Step 250 CIP_IONC_PORT conductivity reading", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Step 260 CIP_METHA_MED_PORT conductivity reading", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Step 270 CIP_FEED_PORT conductivity reading", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Step 280 CIP_GAS_DRAIN conductivity reading", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Step 290 CIP_EXHAUST_1_DRAIN conductivity reading", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Step 300 CIP_EXHAUST_2_DRAIN conductivity reading", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Step 310 CIP_SPRAYBALL_1 conductivity reading", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Step 320 CIP_SPRAYBALL_2 conductivity reading", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Step 350 CIP_AGITATOR conductivity reading", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Step 360 CIP_XFER_LINE conductivity reading（Sample downstream of XV-702 on FE002）", "note": true, "cols": [{"h": "", "type": "cond"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}]}, {"id": "B-1", "name": "PH504-FILL_VESSEL", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Selection (0= Ambient WFI/Hot WFI, 1=CIP_SUPPLY)", "unit": "#", "def": "0"}, {"pid": "PP02", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "0"}, {"pid": "PP03", "desc": "TS006 (0=Ambient WFI, 1=Hot WFI)", "unit": "#", "def": "0"}, {"pid": "PP04", "desc": "Fill Vessel", "unit": "kg", "def": "Set as required by the Data Record Sheet"}, {"pid": "CP01", "desc": "Drain Holdup", "unit": "sec", "def": "30"}]}], "rows": [{"t": "item", "no": "", "name": "Vessel weight before run (after Tare)", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "PP04 set to 10", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Vessel weight after run (A)", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Difference (A-10)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-1|r4|c0"}, "parts": [{"expr": "A-10", "dp": 2, "unit": "kg"}], "desc": "Vessel weight after run (A) − 10"}}]}, {"t": "gap"}, {"t": "item", "no": "", "name": "Vessel weight before run", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "PP04 set to 30 - difference", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-1|r4|c0"}, "parts": [{"expr": "30-(A-10)", "dp": 2, "unit": "kg"}], "desc": "30 − Difference"}}]}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Vessel weight after run", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Is vessel weight within 30 kg ± 0.5 kg?", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"W": "B-1|r11|c0"}, "parts": [{"expr": "Math.abs(W-30)<=0.5", "yn": true}], "desc": "|Vessel weight after run − 30| ≤ 0.5 kg"}}]}, {"t": "gap"}, {"t": "item", "no": "", "name": "Vessel weight before run", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "PP04 set to 40 - difference", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-1|r4|c0"}, "parts": [{"expr": "40-(A-10)", "dp": 2, "unit": "kg"}], "desc": "40 − Difference"}}]}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Vessel weight after run", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Is vessel weight within 40 kg ± 0.5 kg?", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"W": "B-1|r18|c0"}, "parts": [{"expr": "Math.abs(W-40)<=0.5", "yn": true}], "desc": "|Vessel weight after run − 40| ≤ 0.5 kg"}}]}, {"t": "gap"}, {"t": "item", "no": "", "name": "Vessel weight before run", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "PP04 set to 50 - difference", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-1|r4|c0"}, "parts": [{"expr": "50-(A-10)", "dp": 2, "unit": "kg"}], "desc": "50 − Difference"}}]}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Vessel weight after run", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Is vessel weight within 50 kg ± 0.5 kg?", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"W": "B-1|r25|c0"}, "parts": [{"expr": "Math.abs(W-50)<=0.5", "yn": true}], "desc": "|Vessel weight after run − 50| ≤ 0.5 kg"}}]}]}, {"id": "B-2", "name": "PH401-CTRL_TEMPERATURE", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Temperature Setpoint", "unit": "°C", "def": "Set as required by the Data Record Sheet"}, {"pid": "PP02", "desc": "Stop Control (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Alarm Delay", "unit": "min", "def": "60"}, {"pid": "CP02", "desc": "Alarm Low Low Deviation", "unit": "°C", "def": "2"}, {"pid": "CP03", "desc": "Warning Low Deviation", "unit": "°C", "def": "1"}, {"pid": "CP04", "desc": "Warning High Deviation", "unit": "°C", "def": "1"}, {"pid": "CP05", "desc": "Alarm High High Deviation", "unit": "°C", "def": "2"}, {"pid": "CP06", "desc": "Jacket Timer Elapsed", "unit": "min", "def": "2"}]}], "rows": [{"t": "item", "no": "", "name": "Temperature before Phase start (TE142)", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Vessel weight before Phase start", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "sec", "text": "PP01 Set to 37"}, {"t": "item", "no": "", "name": "Time TE142 first reaches 37 °C", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Time needed to first reach 37 °C", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["B-2|r2|c0", "B-2|r4|c0"], "fmt": "hms", "desc": "Time TE142 first reaches 37 °C − Phase Start Time"}}]}, {"t": "item", "no": "", "name": "Highest temperature within 3 minutes after first reaching 37 °C", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Lowest temperature within 3 minutes after first reaching 37 °C", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Temperature deviation within 3 minutes after first reaching 37 °C", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"H": "B-2|r6|c0", "L": "B-2|r7|c0", "SP": 37.0}, "parts": [{"expr": "H-SP", "dp": 2, "unit": "°C", "label": "最高"}, {"expr": "L-SP", "dp": 2, "unit": "°C", "label": "最低"}], "sign": true, "desc": "最高 − 設定溫度；最低 − 設定溫度（設定溫度 = 37 °C）"}}]}, {"t": "item", "no": "", "name": "Vessel weight", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Highest temperature from 3 to 15 minutes after first reaching 37 °C", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Lowest temperature from 3 to 15 minutes after first reaching 37 °C", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Temperature deviation from 3 to 15 minutes after first reaching 37 °C", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"H": "B-2|r10|c0", "L": "B-2|r11|c0", "SP": 37.0}, "parts": [{"expr": "H-SP", "dp": 2, "unit": "°C", "label": "最高"}, {"expr": "L-SP", "dp": 2, "unit": "°C", "label": "最低"}], "sign": true, "desc": "最高 − 設定溫度；最低 − 設定溫度（設定溫度 = 37 °C）"}}]}, {"t": "sec", "text": "PP01 changed to 10"}, {"t": "item", "no": "", "name": "Time PP01 change is complete", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Time TE142 first reaches 10 °C", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Time needed to first reach 10 °C", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["B-2|r14|c0", "B-2|r15|c0"], "fmt": "hms", "desc": "Time TE142 first reaches 10 °C − Time PP01 change is complete"}}]}, {"t": "item", "no": "", "name": "Highest temperature within 3 minutes after first reaching 10 °C", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Lowest temperature within 3 minutes after first reaching 10 °C", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Temperature deviation within 3 minutes after first reaching 10 °C", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"H": "B-2|r17|c0", "L": "B-2|r18|c0", "SP": 10.0}, "parts": [{"expr": "H-SP", "dp": 2, "unit": "°C", "label": "最高"}, {"expr": "L-SP", "dp": 2, "unit": "°C", "label": "最低"}], "sign": true, "desc": "最高 − 設定溫度；最低 − 設定溫度（設定溫度 = 10 °C）"}}]}, {"t": "item", "no": "", "name": "Highest temperature from 3 to 15 minutes after first reaching 10 °C", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Lowest temperature from 3 to 15 minutes after first reaching 10 °C", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "Temperature deviation from 3 to 15 minutes after first reaching 10 °C", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"H": "B-2|r20|c0", "L": "B-2|r21|c0", "SP": 10.0}, "parts": [{"expr": "H-SP", "dp": 2, "unit": "°C", "label": "最高"}, {"expr": "L-SP", "dp": 2, "unit": "°C", "label": "最低"}], "sign": true, "desc": "最高 − 設定溫度；最低 − 設定溫度（設定溫度 = 10 °C）"}}]}]}, {"id": "B-3", "name": "PH305 CIP_DRAIN", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Agitator Setpoint", "unit": "rpm", "def": "400"}, {"pid": "PP02", "desc": "CIP Pump Setpoint", "unit": "%", "def": "60"}, {"pid": "PP03", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Vessel Drain Residual Volume", "unit": "kg", "def": "5"}, {"pid": "CP02", "desc": "Gravity Drain Time", "unit": "min", "def": "3"}]}], "rows": [{"t": "item", "no": "", "name": "FE001 weight before run", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["B-3|r1|c0", "B-3|r2|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}, {"t": "item", "no": "", "name": "Final FE001 weight", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Visually check the vessel for residual water", "note": true, "cols": [{"h": "", "type": "yn"}]}]}, {"id": "B-4", "name": "PH304-CIP_AIRBLOW", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Airblow Drain Selection (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "PP02", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "0"}, {"pid": "PP03", "desc": "Airblow Selection (0=FE002, 1= FE003)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Airblow ALL FILTERS", "unit": "sec", "def": "5"}, {"pid": "CP02", "desc": "Airblow ALL ADDITIONALS", "unit": "sec", "def": "5"}, {"pid": "CP03", "desc": "Airblow ALL SPRAYBALLS", "unit": "sec", "def": "5"}, {"pid": "CP04", "desc": "Airblow Vessel", "unit": "sec", "def": "5"}, {"pid": "CP05", "desc": "Airblow Transfer Line", "unit": "sec", "def": "300"}, {"pid": "CP06", "desc": "Airblow WFI Line", "unit": "sec", "def": "5"}]}], "rows": [{"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Time until no visible water drips from downstream of XV-702 (FE002) (sec.)", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}]}, {"id": "B-5", "name": "PH304-CIP_AIRBLOW", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Airblow Drain Selection (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "PP02", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "0"}, {"pid": "PP03", "desc": "Airblow Selection (0=FE002, 1= FE003)", "unit": "#", "def": "1"}, {"pid": "CP01", "desc": "Airblow ALL FILTERS", "unit": "sec", "def": "5"}, {"pid": "CP02", "desc": "Airblow ALL ADDITIONALS", "unit": "sec", "def": "5"}, {"pid": "CP03", "desc": "Airblow ALL SPRAYBALLS", "unit": "sec", "def": "5"}, {"pid": "CP04", "desc": "Airblow Vessel", "unit": "sec", "def": "5"}, {"pid": "CP05", "desc": "Airblow Transfer Line", "unit": "sec", "def": "300"}, {"pid": "CP06", "desc": "Airblow WFI Line", "unit": "sec", "def": "5"}]}], "rows": [{"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Time until no visible water drips from downstream of XV-702 (FE003) (sec.)", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}]}, {"id": "B-6", "name": "PH201-XFER_IN_INOC", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Inoculum Addition Volume", "unit": "kg", "def": "Adjust as shown in the Data Record Sheet."}, {"pid": "CP01", "desc": "Vessel Weight High Alarm", "unit": "kg", "def": "45"}]}], "rows": [{"t": "item", "no": "", "name": "SC-B53902 reading after connecting the tube", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "WE-156 reading after connecting the tube", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "gap"}, {"t": "item", "no": "", "name": "SC-B53902 reading after the tube is full", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "WE-156 reading after the tube is full", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "sec", "text": "P-728 speed manually set to 60% of the maximum output, PP01 set to 5"}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "SC-B53902 reading after the phase ends", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "WE-156 reading after the phase ends", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Calculated flow rate at 60% (kg/min)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-6|r3|c0", "B": "B-6|r8|c0", "T": {"dur": ["B-6|r6|c0", "B-6|r7|c0"]}}, "parts": [{"expr": "(A-B)/T", "dp": 3, "unit": "kg/min"}], "desc": "(SC-B53902: tube full − phase ends) ÷ Phase Duration (min)"}}]}, {"t": "sec", "text": "P-728 speed manually set to 10% of the maximum output, PP01 set to 50"}, {"t": "item", "no": "", "name": "SC-B53902 reading 10 seconds after the phase starts", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "SC-B53902 reading 5 minutes later", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Calculated flow rate at 10% (kg/min)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-6|r12|c0", "B": "B-6|r13|c0"}, "parts": [{"expr": "(A-B)/5", "dp": 3, "unit": "kg/min"}], "desc": "(SC-B53902: 10 s 讀值 − 5 min 後讀值) ÷ 5"}}]}, {"t": "sec", "text": "P-728 speed manually set to 35% of the maximum output"}, {"t": "item", "no": "", "name": "SC-B53902 reading 10 seconds after the change", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "SC-B53902 reading 5 minutes later", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Calculated flow rate at 35% (kg/min)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-6|r16|c0", "B": "B-6|r17|c0"}, "parts": [{"expr": "(A-B)/5", "dp": 3, "unit": "kg/min"}], "desc": "(SC-B53902: 10 s 讀值 − 5 min 後讀值) ÷ 5"}}]}, {"t": "sec", "text": "P-728 speed manually set to 85% of the maximum output"}, {"t": "item", "no": "", "name": "SC-B53902 reading 10 seconds after the change", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "SC-B53902 reading 5 minutes later", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Calculated flow rate at 85% (kg/min)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-6|r20|c0", "B": "B-6|r21|c0"}, "parts": [{"expr": "(A-B)/5", "dp": 3, "unit": "kg/min"}], "desc": "(SC-B53902: 10 s 讀值 − 5 min 後讀值) ÷ 5"}}]}]}, {"id": "B-7", "name": "PH202-XFER_IN_MeOH_MEDIA", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "MeOH_MEDIA Addition Volume", "unit": "kg", "def": "Adjust as shown in the Data Record Sheet."}, {"pid": "PP02", "desc": "MeOH_Media Pump Setpoint", "unit": "%", "def": "Adjust as shown in the Data Record Sheet."}, {"pid": "PP03", "desc": "Profile Setpoint for MeOH_Media", "unit": "#", "def": "1"}, {"pid": "PP04", "desc": "Selection (0=TRANSFER, 1=CTRL_TRANSFER, 2=PROFILE)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Vessel Weight High Alarm", "unit": "kg", "def": "45"}]}], "rows": [{"t": "item", "no": "", "name": "SC-B53905 reading after connecting the tube", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "WE-156 reading after connecting the tube", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "gap"}, {"t": "item", "no": "", "name": "SC-B53905 reading after the tube is full", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "WE-156 reading after the tube is full", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "sec", "text": "PP01 set to 3, PP02 set to 60"}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "SC-B53905 reading after the phase ends", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "WE-156 reading after the phase ends", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Calculated flow rate at 60% (kg/min)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-7|r3|c0", "B": "B-7|r8|c0", "T": {"dur": ["B-7|r6|c0", "B-7|r7|c0"]}}, "parts": [{"expr": "(A-B)/T", "dp": 3, "unit": "kg/min"}], "desc": "(SC-B53905: tube full − phase ends) ÷ Phase Duration (min)"}}]}, {"t": "sec", "text": "PP01 set to 50, PP02 set to 10"}, {"t": "item", "no": "", "name": "SC-B53905 reading 10 seconds after the phase starts", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "SC-B53905 reading 5 minutes later", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Calculated flow rate at 10% (kg/min)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-7|r12|c0", "B": "B-7|r13|c0"}, "parts": [{"expr": "(A-B)/5", "dp": 3, "unit": "kg/min"}], "desc": "(SC-B53905: 10 s 讀值 − 5 min 後讀值) ÷ 5"}}]}, {"t": "sec", "text": "PP02 changed to 35"}, {"t": "item", "no": "", "name": "SC-B53905 reading 10 seconds after the change", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "SC-B53905 reading 5 minutes later", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Calculated flow rate at 35% (kg/min)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-7|r16|c0", "B": "B-7|r17|c0"}, "parts": [{"expr": "(A-B)/5", "dp": 3, "unit": "kg/min"}], "desc": "(SC-B53905: 10 s 讀值 − 5 min 後讀值) ÷ 5"}}]}, {"t": "sec", "text": "PP02 changed to 85"}, {"t": "item", "no": "", "name": "SC-B53905 reading 10 seconds after the change", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "SC-B53905 reading 5 minutes later", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Calculated flow rate at 85% (kg/min)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-7|r20|c0", "B": "B-7|r21|c0"}, "parts": [{"expr": "(A-B)/5", "dp": 3, "unit": "kg/min"}], "desc": "(SC-B53905: 10 s 讀值 − 5 min 後讀值) ÷ 5"}}]}]}, {"id": "B-8", "name": "PH203-XFER_IN_FEED", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Feed Addition Volume", "unit": "kg", "def": "Adjust as shown in the Data Record Sheet."}, {"pid": "PP02", "desc": "Feed Pump Setpoint", "unit": "%", "def": "Adjust as shown in the Data Record Sheet."}, {"pid": "PP03", "desc": "Profile Setpoint for Feed", "unit": "#", "def": "1"}, {"pid": "PP04", "desc": "Selection (0=TRANSFER, 1=CTRL_TRANSFER, 2=PROFILE)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Vessel Weight High Alarm", "unit": "kg", "def": "45"}]}], "rows": [{"t": "item", "no": "", "name": "WE-760 reading after connecting the tube", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "WE-156 reading after connecting the tube", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "gap"}, {"t": "item", "no": "", "name": "WE-760 reading after the tube is full", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "WE-156 reading after the tube is full", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "sec", "text": "PP01 set to 3, PP02 set to 60"}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HMI Feeding Rate reading after 2 minutes", "note": true, "cols": [{"h": "", "type": "num"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "WE-760 reading after the phase ends", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "WE-156 reading after the phase ends", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Calculated flow rate at 60% (kg/min)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-8|r3|c0", "B": "B-8|r9|c0", "T": {"dur": ["B-8|r6|c0", "B-8|r8|c0"]}}, "parts": [{"expr": "(A-B)/T", "dp": 3, "unit": "kg/min"}], "desc": "(WE-760: tube full − phase ends) ÷ Phase Duration (min)"}}]}, {"t": "sec", "text": "PP01 set to 50, PP02 set to 10"}, {"t": "item", "no": "", "name": "WE-760 reading 10 seconds after the phase starts", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "HMI Feeding Rate reading after 3 minutes", "note": true, "cols": [{"h": "", "type": "num"}]}, {"t": "item", "no": "", "name": "WE-760 reading 5 minutes later", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Calculated flow rate at 10% (kg/min)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-8|r13|c0", "B": "B-8|r15|c0"}, "parts": [{"expr": "(A-B)/5", "dp": 3, "unit": "kg/min"}], "desc": "(WE-760: 10 s 讀值 − 5 min 後讀值) ÷ 5"}}]}, {"t": "sec", "text": "PP02 changed to 35"}, {"t": "item", "no": "", "name": "WE-760 reading 10 seconds after the change", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "HMI Feeding Rate reading after 3 minutes", "note": true, "cols": [{"h": "", "type": "num"}]}, {"t": "item", "no": "", "name": "WE-760 reading 5 minutes later", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Calculated flow rate at 35% (kg/min)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-8|r18|c0", "B": "B-8|r20|c0"}, "parts": [{"expr": "(A-B)/5", "dp": 3, "unit": "kg/min"}], "desc": "(WE-760: 10 s 讀值 − 5 min 後讀值) ÷ 5"}}]}, {"t": "sec", "text": "PP02 changed to 85"}, {"t": "item", "no": "", "name": "WE-760 reading 10 seconds after the change", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "HMI Feeding Rate reading after 3 minutes", "note": true, "cols": [{"h": "", "type": "num"}]}, {"t": "item", "no": "", "name": "WE-760 reading 5 minutes later", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Calculated flow rate at 85% (kg/min)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"vars": {"A": "B-8|r23|c0", "B": "B-8|r25|c0"}, "parts": [{"expr": "(A-B)/5", "dp": 3, "unit": "kg/min"}], "desc": "(WE-760: 10 s 讀值 − 5 min 後讀值) ÷ 5"}}]}]}, {"id": "B-9", "name": "PH409-CTRL_ANTIFOAM", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Stop Control (0=No, 1=Yes)", "unit": "#", "def": "0"}]}], "rows": [{"t": "sec", "text": "CL_ANTIFOAM settings"}, {"t": "item", "no": "", "name": "Pulse (sec)", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Cycle (sec)", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Delay ON (sec)", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "sec", "text": "Manually touch LE152 to the stainless steel of the vessel."}, {"t": "item", "no": "", "name": "Time for P-868 to start", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "sec", "text": "Remove LE152 from the vessel."}, {"t": "item", "no": "", "name": "Does P-868 stop?", "note": true, "cols": [{"h": "", "type": "yn"}]}]}, {"id": "C-1", "name": "PH504-FILL_VESSEL", "params": [{"label": "PH504 FILL_VESSEL", "rows": [{"pid": "PP01", "desc": "Selection (0= Ambient WFI/Hot WFI, 1=CIP_SUPPLY)", "unit": "#", "def": "1"}, {"pid": "PP02", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "0"}, {"pid": "PP03", "desc": "TS006 (0=Ambient WFI, 1=Hot WFI)", "unit": "#", "def": "0"}, {"pid": "PP04", "desc": "Fill Vessel", "unit": "kg", "def": "25"}, {"pid": "CP01", "desc": "Drain Holdup", "unit": "sec", "def": "30"}]}, {"label": "PH401 CTRL_TEMPERATURE（控溫至 20 °C，見 Operating Procedure）", "rows": [{"pid": "PP01", "desc": "Temperature Setpoint", "unit": "°C", "def": "20"}, {"pid": "PP02", "desc": "Stop Control (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Alarm Delay", "unit": "min", "def": "60"}, {"pid": "CP02", "desc": "Alarm Low Low Deviation", "unit": "°C", "def": "2"}, {"pid": "CP03", "desc": "Warning Low Deviation", "unit": "°C", "def": "1"}, {"pid": "CP04", "desc": "Warning High Deviation", "unit": "°C", "def": "1"}, {"pid": "CP05", "desc": "Alarm High High Deviation", "unit": "°C", "def": "2"}, {"pid": "CP06", "desc": "Jacket Timer Elapsed", "unit": "min", "def": "2"}]}], "rows": [{"t": "sec", "text": "Before the Phase runs"}, {"t": "item", "no": "", "name": "CIP01(LI980)", "note": true, "cols": [{"h": "", "type": "num"}]}, {"t": "item", "no": "", "name": "FE001 (WE156)", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "sec", "text": "Set the PH504 parameters as in Parameter Settings and run the Phase. Wait for the Phase to finish."}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "CIP01(LI980)", "note": true, "cols": [{"h": "", "type": "num"}]}, {"t": "item", "no": "", "name": "FE001 (WE156)", "note": true, "cols": [{"h": "", "type": "num", "unit": "kg"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "sec", "text": "Set the PH401 parameters as in the Operating Procedure and run the Phase"}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Temperature After Phase End (TE142)", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}]}, {"id": "C-2", "name": "PH401-CTRL_TEMPERATURE", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Temperature Setpoint", "unit": "°C", "def": "50"}, {"pid": "PP02", "desc": "Stop Control (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Alarm Delay", "unit": "min", "def": "60"}, {"pid": "CP02", "desc": "Alarm Low Low Deviation", "unit": "°C", "def": "2"}, {"pid": "CP03", "desc": "Warning Low Deviation", "unit": "°C", "def": "1"}, {"pid": "CP04", "desc": "Warning High Deviation", "unit": "°C", "def": "1"}, {"pid": "CP05", "desc": "Alarm High High Deviation", "unit": "°C", "def": "2"}, {"pid": "CP06", "desc": "Jacket Timer Elapsed", "unit": "min", "def": "2"}]}], "rows": [{"t": "sec", "text": "Before the Phase runs"}, {"t": "item", "no": "", "name": "Temperature before Phase start (TE142)", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "sec", "text": "Set the PH401 parameters as in Parameter Settings and run the Phase"}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Time TE142 first reaches 50 °C", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}]}, {"id": "C-3", "name": "PH302-CIP_RECIRCULATION", "params": [{"label": "PH302 CIP_RECIRCULATION", "rows": [{"pid": "PP01", "desc": "Agitator Setpoint", "unit": "rpm", "def": "400"}, {"pid": "PP02", "desc": "Weight High Alarm", "unit": "kg", "def": "45"}, {"pid": "PP03", "desc": "Pressure High Alarm", "unit": "bar", "def": "1"}, {"pid": "PP04", "desc": "CIP Recirculation Counts", "unit": "#", "def": "2"}, {"pid": "PP05", "desc": "CIP Line Pressure Setpoint", "unit": "bar", "def": "1"}, {"pid": "PP06", "desc": "CIP Recirculation Temperature", "unit": "°C", "def": "60"}, {"pid": "PP07", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "2"}, {"pid": "PP08", "desc": "CIP Pump Setpoint", "unit": "%", "def": "30"}, {"pid": "PP09", "desc": "Vessel Drain Setpoint", "unit": "kg", "def": "5"}, {"pid": "CP01", "desc": "CIP ALL FILTERS", "unit": "sec", "def": "20"}, {"pid": "CP02", "desc": "CIP ALL ADDITIONALS", "unit": "sec", "def": "20"}, {"pid": "CP03", "desc": "CIP ALL SPRAYBALLS", "unit": "sec", "def": "30"}, {"pid": "CP04", "desc": "Max Steptime HEAT", "unit": "min", "def": "60"}, {"pid": "CP05", "desc": "Temp Alarm Low Low Deviation", "unit": "°C", "def": "2"}, {"pid": "CP06", "desc": "Stabilization Time", "unit": "sec", "def": "60"}, {"pid": "CP07", "desc": "Steptime GRAVITY_DRAIN", "unit": "min", "def": "5"}, {"pid": "CP08", "desc": "CIP of Transfer Line", "unit": "sec", "def": "20"}]}, {"label": "PH304 CIP_AIRBLOW（排除積水用）", "rows": [{"pid": "PP01", "desc": "Airblow Drain Selection (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "PP02", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "0"}, {"pid": "PP03", "desc": "Airblow Selection (0=FE002, 1= FE003)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Airblow ALL FILTERS", "unit": "sec", "def": "10"}, {"pid": "CP02", "desc": "Airblow ALL ADDITIONALS", "unit": "sec", "def": "10"}, {"pid": "CP03", "desc": "Airblow ALL SPRAYBALLS", "unit": "sec", "def": "10"}, {"pid": "CP04", "desc": "Airblow Vessel", "unit": "sec", "def": "10"}, {"pid": "CP05", "desc": "Airblow Transfer Line", "unit": "sec", "def": "10"}, {"pid": "CP06", "desc": "Airblow WFI Line", "unit": "sec", "def": "10"}]}], "rows": [{"t": "item", "no": "", "name": "Temperature Before HEAT start (TE142)", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "PH302 Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "mmss"}]}, {"t": "item", "no": "", "name": "Temperature after HEAT ends (TE142)", "note": true, "cols": [{"h": "", "type": "num", "unit": "°C"}]}, {"t": "item", "no": "", "name": "PH302 Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["C-3|r1|c0", "C-3|r5|c0"], "fmt": "hhmm", "desc": "PH302 Phase End Time − PH302 Phase Start Time"}}]}, {"t": "item", "no": "", "name": "PH304 Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "PH304 Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}]}, {"id": "C-4", "name": "PH301-CIP_ONCE_THROUGH", "params": [{"label": "PH301 CIP_ONCE_THROUGH", "rows": [{"pid": "PP01", "desc": "Rinse Selection (0=Ambient WFI, 1=Hot WFI)", "unit": "#", "def": "0"}, {"pid": "PP02", "desc": "Agitator Setpoint", "unit": "rpm", "def": "400"}, {"pid": "PP03", "desc": "Weight High Alarm", "unit": "kg", "def": "45"}, {"pid": "PP04", "desc": "Pressure High Alarm", "unit": "bar", "def": "1"}, {"pid": "PP05", "desc": "CIP Pump Setpoint for all Filters", "unit": "%", "def": "40"}, {"pid": "PP06", "desc": "CIP Pump Setpoint for all Additional ports", "unit": "%", "def": "50"}, {"pid": "PP07", "desc": "CIP Pump Setpoint for all Sprayballs", "unit": "%", "def": "60"}, {"pid": "PP08", "desc": "CIP Counts", "unit": "#", "def": "1"}, {"pid": "PP09", "desc": "CIP Drain Selection (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "PP10", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "0"}, {"pid": "PP11", "desc": "Selection (0=FE002, 1= FE003)", "unit": "#", "def": "0"}, {"pid": "PP12", "desc": "Minimum Vessel volume", "unit": "kg", "def": "25"}, {"pid": "PP13", "desc": "Maximum Vessel volume", "unit": "kg", "def": "45"}, {"pid": "CP01", "desc": "CIP ALL FILTERS", "unit": "sec", "def": "Based on the result of Test A-18"}, {"pid": "CP02", "desc": "CIP ALL ADDITIONALS", "unit": "sec", "def": "Based on the result of Test A-18"}, {"pid": "CP03", "desc": "CIP ALL SPRAYBALLS", "unit": "sec", "def": "Based on the result of Test A-18"}, {"pid": "CP04", "desc": "CIP AGITATOR", "unit": "sec", "def": "Based on the result of Test A-18"}, {"pid": "CP05", "desc": "CIP of Transfer Line", "unit": "sec", "def": "Based on the result of Test A-18"}, {"pid": "CP06", "desc": "Steptime GRAVITY_DRAIN", "unit": "min", "def": "5"}]}, {"label": "PH304 CIP_AIRBLOW（排除積水用）", "rows": [{"pid": "PP01", "desc": "Airblow Drain Selection (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "PP02", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "0"}, {"pid": "PP03", "desc": "Airblow Selection (0=FE002, 1= FE003)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Airblow ALL FILTERS", "unit": "sec", "def": "10"}, {"pid": "CP02", "desc": "Airblow ALL ADDITIONALS", "unit": "sec", "def": "10"}, {"pid": "CP03", "desc": "Airblow ALL SPRAYBALLS", "unit": "sec", "def": "10"}, {"pid": "CP04", "desc": "Airblow Vessel", "unit": "sec", "def": "10"}, {"pid": "CP05", "desc": "Airblow Transfer Line", "unit": "sec", "def": "10"}, {"pid": "CP06", "desc": "Airblow WFI Line", "unit": "sec", "def": "10"}]}], "rows": [{"t": "item", "no": "", "name": "AWFI level (%)", "note": true, "cols": [{"h": "", "type": "num", "unit": "%"}]}, {"t": "item", "no": "", "name": "PH301 Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Time until no visible water drips from downstream of XV-702 (sec.)", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "PH301 Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "AWFI level (%)", "note": true, "cols": [{"h": "", "type": "num", "unit": "%"}]}, {"t": "item", "no": "", "name": "PH304 Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "PH304 Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}]}, {"id": "C-5", "name": "PH303-CIP_FINAL_RINSE", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Rinse Selection (0=Ambient WFI, 1=Hot WFI)", "unit": "#", "def": "0"}, {"pid": "PP02", "desc": "Agitator Setpoint", "unit": "rpm", "def": "400"}, {"pid": "PP03", "desc": "Weight High Alarm", "unit": "kg", "def": "45"}, {"pid": "PP04", "desc": "Pressure High Alarm", "unit": "bar", "def": "1"}, {"pid": "PP05", "desc": "CIP Pump Setpoint for all Filters", "unit": "%", "def": "40"}, {"pid": "PP06", "desc": "CIP Pump Setpoint for all Additional ports", "unit": "%", "def": "50"}, {"pid": "PP07", "desc": "CIP Pump Setpoint for all Sprayballs", "unit": "%", "def": "60"}, {"pid": "PP08", "desc": "Final Conductivity", "unit": "μS/cm", "def": "1"}, {"pid": "PP09", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "0"}, {"pid": "PP10", "desc": "Selection (0=FE002, 1= FE003)", "unit": "#", "def": "0"}, {"pid": "PP11", "desc": "Minimum Vessel volume", "unit": "kg", "def": "15"}, {"pid": "PP12", "desc": "Maximum Vessel volume", "unit": "kg", "def": "45"}, {"pid": "CP01", "desc": "CIP ALL FILTERS", "unit": "sec", "def": "20"}, {"pid": "CP02", "desc": "CIP ALL ADDITIONALS", "unit": "sec", "def": "20"}, {"pid": "CP03", "desc": "CIP ALL SPRAYBALLS", "unit": "sec", "def": "30"}, {"pid": "CP04", "desc": "CIP of Transfer Line", "unit": "sec", "def": "20"}, {"pid": "CP05", "desc": "Flushing of CIP Line", "unit": "sec", "def": "20"}]}], "rows": [{"t": "item", "no": "", "name": "AWFI level (%)", "note": true, "cols": [{"h": "", "type": "num", "unit": "%"}]}, {"t": "item", "no": "", "name": "PH303 Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Does Step 293 pass?", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "Does Step 330 pass?", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "PH303 Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "AWFI level (%)", "note": true, "cols": [{"h": "", "type": "num", "unit": "%"}]}, {"t": "item", "no": "", "name": "Attach the Phase Report", "note": true, "cols": [{"h": "", "type": "done"}]}]}, {"id": "C-6", "name": "PH304-CIP_AIRBLOW", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Airblow Drain Selection (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "PP02", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2, 2=Both)", "unit": "#", "def": "0"}, {"pid": "PP03", "desc": "Airblow Selection (0=FE002, 1= FE003)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Airblow ALL FILTERS", "unit": "sec", "def": "300"}, {"pid": "CP02", "desc": "Airblow ALL ADDITIONALS", "unit": "sec", "def": "300"}, {"pid": "CP03", "desc": "Airblow ALL SPRAYBALLS", "unit": "sec", "def": "300"}, {"pid": "CP04", "desc": "Airblow Vessel", "unit": "sec", "def": "30"}, {"pid": "CP05", "desc": "Airblow Transfer Line", "unit": "sec", "def": "300"}, {"pid": "CP06", "desc": "Airblow WFI Line", "unit": "sec", "def": "300"}]}], "rows": [{"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "sec", "text": "For each Step, check how long it takes before there are no clear water drops at the matching position"}, {"t": "item", "no": "", "name": "Step 110", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Step 120", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Step 130", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Step 140", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Step 150", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Step 160", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Step 170", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Step 210", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Step 220", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Step 225", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Step 230", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Step 240", "note": true, "cols": [{"h": "", "type": "num", "unit": "sec"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}], "ref": {"title": "各 Step 對應參數與檢查位置", "rows": [["Step No.", "Parameter", "Position to check", "Note"], ["110", "CP01", "", "Check through the window"], ["120", "CP01", "", "Check through the window"], ["130", "CP01", "", "Check through the window"], ["140", "CP01", "", "Check through the window"], ["150", "CP02", "", "Check through the window"], ["160", "CP02", "", "Check through the window"], ["170", "CP02", "", "Check through the window"], ["210", "CP03", "", "Check through the window"], ["220", "CP02", "", "Check through the window"], ["225", "CP06", "", "Check through the window"], ["230", "CP04", "", "Check through the window"], ["240", "CP05", "TC downstream of XV-702 on FE002", "Check through the window"]]}}, {"id": "C-7", "name": "PH107-SIP_GAS_FILTER", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Sterilization Time", "unit": "min", "def": "20"}, {"pid": "PP02", "desc": "Sterilization Time Max", "unit": "min", "def": "90"}, {"pid": "PP03", "desc": "Sterilization Temperature", "unit": "°C", "def": "123"}, {"pid": "CP01", "desc": "Low Alarm Threshold Condensate", "unit": "°C", "def": "121"}, {"pid": "CP02", "desc": "Max Steptime HEAT", "unit": "min", "def": "15"}, {"pid": "CP03", "desc": "Transition Time COOL", "unit": "min", "def": "2"}, {"pid": "CP04", "desc": "Sterilization Hold Temperature", "unit": "°C", "def": "120"}, {"pid": "CP05", "desc": "Stabilization Time", "unit": "min", "def": "2"}, {"pid": "CP06", "desc": "Airflow Setpoint", "unit": "slpm", "def": "50"}]}], "rows": [{"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "STRI Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["C-7|r1|c0", "C-7|r2|c0"], "fmt": "mmss", "desc": "STRI Start Time − HEAT Start Time"}}]}, {"t": "sec", "text": "Was each thermometer at or above 121.0 °C for more than 15 minutes?"}, {"t": "item", "no": "", "name": "TE506 (GAS)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "sec", "text": "Confirm the Pulse setting"}, {"t": "item", "no": "", "name": "Attach the Pulse Valve Timing Table", "note": true, "cols": [{"h": "", "type": "done"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["C-7|r0|c0", "C-7|r8|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}]}, {"id": "D-1", "name": "PH403-CTRL_PRESSURE", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Pressure Setpoint", "unit": "bar", "def": "Set as required by the Data Record Sheet"}, {"pid": "PP02", "desc": "Stop Control (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "PP03", "desc": "Selection (0=Exh Filter 1, 1=Exh Filter 2)", "unit": "#", "def": "0"}, {"pid": "PP04", "desc": "Pressure High Limit", "unit": "bar", "def": "1"}, {"pid": "CP01", "desc": "Alarm Delay", "unit": "sec", "def": "60"}, {"pid": "CP02", "desc": "Alarm Low Low Deviation", "unit": "bar", "def": "0.4"}, {"pid": "CP03", "desc": "Warning Low Deviation", "unit": "bar", "def": "0.2"}, {"pid": "CP04", "desc": "Warning High Deviation", "unit": "bar", "def": "0.2"}, {"pid": "CP05", "desc": "Alarm High High Deviation", "unit": "bar", "def": "0.4"}]}], "rows": [{"t": "sec", "text": "Start PH411, then start PH410 (with PP01 set to 1)"}, {"t": "sec", "text": "Start PH403 (with PP01 set to 0.2)"}, {"t": "sec", "text": "Start PH406 (with PP01 set to 50)"}, {"t": "item", "no": "", "name": "Pressure reading PIC150", "note": true, "cols": [{"h": "", "type": "num", "unit": "bar"}]}, {"t": "item", "no": "", "name": "Air flow reading FIC568 (slpm)", "note": true, "cols": [{"h": "", "type": "num", "unit": "slpm"}]}, {"t": "sec", "text": "Change PP01 of PH403 to 0.5"}, {"t": "item", "no": "", "name": "Pressure reading PIC150", "note": true, "cols": [{"h": "", "type": "num", "unit": "bar"}]}, {"t": "item", "no": "", "name": "Air flow reading FIC568 (slpm)", "note": true, "cols": [{"h": "", "type": "num", "unit": "slpm"}]}]}, {"id": "D-2", "name": "PH407-CTRL_O2", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "O2 flow Setpoint", "unit": "slpm", "def": "Set as required by the Data Record Sheet"}, {"pid": "PP02", "desc": "Stop Control (0=No, 1=Yes)", "unit": "#", "def": "0"}, {"pid": "PP03", "desc": "Mode (0=AUTO, 1=CASC)", "unit": "#", "def": "0"}, {"pid": "CP01", "desc": "Alarm Delay", "unit": "sec", "def": "60"}, {"pid": "CP02", "desc": "Alarm Low Low Deviation", "unit": "slpm", "def": "20"}, {"pid": "CP03", "desc": "Warning Low Deviation", "unit": "slpm", "def": "10"}, {"pid": "CP04", "desc": "Warning High Deviation", "unit": "slpm", "def": "10"}, {"pid": "CP05", "desc": "Alarm High High Deviation", "unit": "slpm", "def": "20"}]}], "rows": [{"t": "sec", "text": "Make sure PH411, PH410, and PH403 are running"}, {"t": "sec", "text": "Start PH407 (with PP01 set to 50)"}, {"t": "item", "no": "", "name": "Pressure reading PIC150", "note": true, "cols": [{"h": "", "type": "num", "unit": "bar"}]}, {"t": "item", "no": "", "name": "Air flow reading FIC568 (slpm)", "note": true, "cols": [{"h": "", "type": "num", "unit": "slpm"}]}, {"t": "item", "no": "", "name": "O2 flow reading FIC598 (slpm)", "note": true, "cols": [{"h": "", "type": "num", "unit": "slpm"}]}, {"t": "sec", "text": "Change PP01 of PH407 to 100"}, {"t": "item", "no": "", "name": "Pressure reading PIC150", "note": true, "cols": [{"h": "", "type": "num", "unit": "bar"}]}, {"t": "item", "no": "", "name": "Air flow reading FIC568 (slpm)", "note": true, "cols": [{"h": "", "type": "num", "unit": "slpm"}]}, {"t": "item", "no": "", "name": "O2 flow reading FIC598 (slpm)", "note": true, "cols": [{"h": "", "type": "num", "unit": "slpm"}]}, {"t": "sec", "text": "Change PP02 of PH407 to 1 and stop PH407"}]}, {"id": "D-3", "name": "PH106-SIP_EXH_FILTER_2", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Sterilization Time", "unit": "min", "def": "20"}, {"pid": "PP02", "desc": "Sterilization Time Max", "unit": "min", "def": "90"}, {"pid": "PP03", "desc": "Sterilization Temperature", "unit": "°C", "def": "123"}, {"pid": "CP01", "desc": "Low Alarm Threshold Condensate", "unit": "°C", "def": "121"}, {"pid": "CP02", "desc": "Max Steptime HEAT", "unit": "min", "def": "15"}, {"pid": "CP03", "desc": "Transition Time COOL", "unit": "min", "def": "2"}, {"pid": "CP04", "desc": "Sterilization Hold Temperature", "unit": "°C", "def": "120"}, {"pid": "CP05", "desc": "Stabilization Time", "unit": "min", "def": "2"}]}], "rows": [{"t": "sec", "text": "Make sure PH411, PH410, PH403, and PH406 are running"}, {"t": "sec", "text": "Make sure PP03 of PH403 is set to 0"}, {"t": "sec", "text": "Start PH106"}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "STRI Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["D-3|r4|c0", "D-3|r5|c0"], "fmt": "mmss", "desc": "STRI Start Time − HEAT Start Time"}}]}, {"t": "sec", "text": "Was each thermometer at or above 121.0 °C for more than 15 minutes?"}, {"t": "item", "no": "", "name": "TE620 (F-610)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE616 (F-610)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "sec", "text": "Confirm the Pulse setting"}, {"t": "item", "no": "", "name": "Attach the Pulse Valve Timing Table", "note": true, "cols": [{"h": "", "type": "done"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["D-3|r3|c0", "D-3|r12|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}]}, {"id": "D-4", "name": "PH105-SIP_EXH_FILTER_1", "params": [{"label": "", "rows": [{"pid": "PP01", "desc": "Sterilization Time", "unit": "min", "def": "20"}, {"pid": "PP02", "desc": "Sterilization Time Max", "unit": "min", "def": "90"}, {"pid": "PP03", "desc": "Sterilization Temperature", "unit": "°C", "def": "123"}, {"pid": "CP01", "desc": "Low Alarm Threshold Condensate", "unit": "°C", "def": "121"}, {"pid": "CP02", "desc": "Max Steptime HEAT", "unit": "min", "def": "15"}, {"pid": "CP03", "desc": "Transition Time COOL", "unit": "min", "def": "2"}, {"pid": "CP04", "desc": "Sterilization Hold Temperature", "unit": "°C", "def": "120"}, {"pid": "CP05", "desc": "Stabilization Time", "unit": "min", "def": "2"}]}], "rows": [{"t": "sec", "text": "Make sure PH411, PH410, PH403, and PH406 are running"}, {"t": "sec", "text": "Make sure PP03 of PH403 is set to 1"}, {"t": "sec", "text": "Start PH105"}, {"t": "item", "no": "", "name": "Phase Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "STRI Start Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "HEAT Duration (mm:ss)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["D-4|r4|c0", "D-4|r5|c0"], "fmt": "mmss", "desc": "STRI Start Time − HEAT Start Time"}}]}, {"t": "sec", "text": "Was each thermometer at or above 121.0 °C for more than 15 minutes?"}, {"t": "item", "no": "", "name": "TE625 (F-600)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "item", "no": "", "name": "TE606 (F-600)", "note": true, "cols": [{"h": "", "type": "yn"}]}, {"t": "sec", "text": "Confirm the Pulse setting"}, {"t": "item", "no": "", "name": "Attach the Pulse Valve Timing Table", "note": true, "cols": [{"h": "", "type": "done"}]}, {"t": "item", "no": "", "name": "Phase End Time", "note": true, "cols": [{"h": "", "type": "time"}]}, {"t": "item", "no": "", "name": "Phase Duration (hh:mm)", "note": true, "cols": [{"h": "", "type": "calc", "calc": {"dur": ["D-4|r3|c0", "D-4|r12|c0"], "fmt": "hhmm", "desc": "Phase End Time − Phase Start Time"}}]}]}];
+
+/* ---------- storage ---------- */
+let S = {values:{}, updated:null};
+try { const raw = localStorage.getItem(STORE_KEY); if (raw) S = JSON.parse(raw); } catch(e){}
+if(!S.values) S.values={}; if(!S.copies) S.copies={}; if(!S.copySeq) S.copySeq={};
+function save(){ S.updated = nowStr(); try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){ toast("無法儲存：手機儲存空間不足或被封鎖"); } }
+const V = k => (S.values[k] ?? "");
+function setV(k,v){ if(v===""||v==null) delete S.values[k]; else S.values[k]=v; save(); }
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden") save(); });
+
+/* ---------- helpers ---------- */
+const pad=n=>String(n).padStart(2,"0");
+function fmtDate(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;}
+function nowStr(){return fmtDate(new Date());}
+function parseT(s){ const m=/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/.exec(s||""); if(!m) return null;
+  return new Date(+m[1],+m[2]-1,+m[3],+m[4],+m[5],+m[6]); }
+function num(s){ if(s==null) return NaN; s=String(s).replace(/,/g,"").trim(); if(s==="") return NaN; return Number(s); }
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove("show"),1800);}
+const TMAP = {}; DATA.forEach((t,i)=>{t._i=i;TMAP[t.id]=t;});
+const PURPOSE = {"A-1": ["確認至無菌邊界的所有連接正確、無洩漏。保壓 1.5 bar、90 min，Run 1 接 FE002、Run 2 接 FE003 各做一次，允收標準 ≤ 0.02 bar/h。", "保壓起訖壓力、Vessel 與 Transfer Line 的 Pressure Drop（bar 與 bar/h，自動計算）、Phase 起訖時間與執行時間。"], "A-2": ["確認 HEADER 的 PP02 設為 Both（2）時，對其他 Phase 能否啟動的影響。", "啟動本 Phase 後才可執行的 Phase、Interlock 的 Phase。"], "A-3": ["在 FE003 執行 PH307 AIRBLOW_HEADER，於 FE001 空罐 SIP 前排除 Header 積水，避免 STEAM_FLUSHING 時水錘；確認依設定參數完成所需時間。", "Phase 起訖時間與執行時間。"], "A-4": ["空罐 SIP（含 WFI Line、所有加料管線、進氣與排氣濾心）。", "Phase 執行時間、HEAT_1／HEAT_2 各段時間（自動計算）、各關鍵溫度計 ≥ 121.0 °C 是否超過 15 min、附 Pulse Valve Timing Table。"], "A-5": ["以 pH 4、pH 7 標準液校正 AE144、AE145，確認 pH 計準確度足供後續測試，校正後裝回罐上。", "校正起訖時間與校正時間（自動計算）、Z 值、Slope、是否已裝回罐上。"], "A-6": ["滿罐 SIP：罐內至少 14 kg Ambient WFI，經夾套加熱至滅菌溫度。", "罐重、Phase 執行時間、HEAT_1／HEAT_2 各段時間（自動計算）、各關鍵溫度計 ≥ 121.0 °C 是否超過 15 min、附 Pulse Valve Timing Table。"], "A-7": ["Sample port 獨立 SIP。", "Phase 與 HEAT 時間（HEAT Duration 自動計算）、TE125 ≥ 121.0 °C 是否超過 15 min、附 Pulse Valve Timing Table。"], "A-8": ["Flush Bottom Valve（FBV）獨立 SIP。", "Phase 與 HEAT 時間（HEAT Duration 自動計算）、TE104 ≥ 121.0 °C 是否超過 15 min、附 Pulse Valve Timing Table。"], "A-9": ["裝上 HV-715 管件後，Methanol／Media port 獨立 SIP。", "Phase 與 HEAT 時間（HEAT Duration 自動計算）、TE712 ≥ 121.0 °C 是否超過 15 min、附 Pulse Valve Timing Table。"], "A-10": ["裝上 HV-764 管件後，Feed port 獨立 SIP。", "Phase 與 HEAT 時間（HEAT Duration 自動計算）、TE766 ≥ 121.0 °C 是否超過 15 min、附 Pulse Valve Timing Table。"], "A-11": ["Inoculum port 獨立 SIP。", "Phase 與 HEAT 時間（HEAT Duration 自動計算）、TE722 ≥ 121.0 °C 是否超過 15 min、附 Pulse Valve Timing Table。"], "A-12": ["確認 PH411 DATA_RECORDING 報表記錄的參數；PH411 持續運轉到 A-15 結束後才停止。", "各 SP／PV 參數是否出現在 PH411 報表（Yes／No），另可自填 5 個參數。"], "A-13": ["確認攪拌轉速可依設定（400 rpm）控制；PH402 持續運轉到 A-15 結束後才停止。", "Phase 啟動後的攪拌轉速。"], "A-14": ["控溫至 37 °C，確認到達設定溫度所需時間與穩定後的溫度波動；附 TE142 趨勢圖。", "起始溫度與罐重、到達時間與所需時間（自動計算）、0–3 min 與 3–15 min 的最高／最低溫及與設定溫度的差（自動計算）。"], "A-15": ["以 1 M NaOH（P-838、WE830）控制 pH 至 8.0，確認相關泵浦會啟動；結束後依序停止 PH404 → PH401 → PH402 → PH411。", "起始 pH、Phase 啟動時間、pH 到達 8.0 的時間、穩定後 pH、1 M NaOH 用量、PID 設定。"], "A-16": ["CIP Recirculation（罐內液體先以 PH401 控至 50 °C，濾心換 CC 蓋）。", "Recirculation 開始時的罐重下降（Piping volume，自動計算）、HEAT 時間、HEAT 結束溫度、Phase 執行時間；附 batch report。"], "A-17": ["以短吹氣時間確認 CIP_AIRBLOW 可順利執行並銜接下一測試（積水吹除時間另由 B-4、B-5、C-6 決定）。", "Phase 起訖時間與執行時間、罐內是否有可見積水。"], "A-18": ["CIP Once Through：開始後每 10 秒記錄 HMI 導電度，初估各管線沖洗至 < 1 μS/cm 所需時間，供 C-4 設定參數。", "各 Step 10–120 s 導電度、沖洗至 < 1 μS/cm 所需秒數、Phase 起訖時間。"], "B-1": ["求 FILL_VESSEL 設定量與實際量的差值，並確認設定時扣掉差值可達目標量（30／40／50 kg ± 0.5 kg）。", "PP04 = 10 的實際罐重與差值（自動計算）、各目標的 PP04 建議設定值與是否在 ± 0.5 kg 內（自動判定）。"], "B-2": ["控溫 37 °C 後改 10 °C，確認到達時間與穩定後溫度波動；先啟動 PH411 與 PH402（400 rpm）。TE342 低於 4 °C 時部分關閉 Glycol 供應閥。", "37 °C 與 10 °C 的到達時間、所需時間（自動計算）、0–3 min 與 3–15 min 最高／最低溫及與設定溫度的差（自動計算）。"], "B-3": ["CIP_DRAIN 排空，確認 Phase 執行時間與結束後罐內是否殘水。", "FE001 執行前後重量、Phase 起訖時間與執行時間、目視殘水。"], "B-4": ["決定 FE001 → FE002 Transfer Line 吹除積水所需時間，只看 CP05；XV-702（FE002）下游拆 Tri-clamp 接水。", "Step 240 起算至不再滴水的秒數、Phase 起訖時間。"], "B-5": ["決定 FE001 → FE003 Transfer Line 吹除積水所需時間，只看 CP05；XV-702（FE003）下游拆 Tri-clamp 接水。", "Step 240 起算至不再滴水的秒數、Phase 起訖時間。"], "B-6": ["確認 PP01 加料量由 WE-156 讀值控制，並測 P-728 不同輸出（60／10／35／85 %）的流速；水桶放 SC-B53902。", "SC-B53902 與 WE-156 各階段讀值、各輸出的流速（以 SC-B53902 計算，自動）。"], "B-7": ["確認 PP04 Transfer 功能與 PP01 加料量由 WE-156 控制，並測 PP02 = 60／10／35／85 % 的流速；水桶放 SC-B53905。", "SC-B53905 與 WE-156 各階段讀值、各 PP02 的流速（以 SC-B53905 計算，自動）。"], "B-8": ["確認 PP04 Transfer 功能與 PP01 加料量由 WE-156 控制、HMI Feeding Rate 是否準確，並測 PP02 = 60／10／35／85 % 的流速；水桶放 WE-760。", "WE-760 與 WE-156 各階段讀值、HMI Feeding Rate、各 PP02 的流速（以 WE-760 計算，自動）。"], "B-9": ["手動以 LE152 碰觸罐體觸發 Antifoam，確認 P-868 啟動；移開後確認停止。", "CL_ANTIFOAM 設定（Pulse、Cycle、Delay ON）、P-868 啟動時間點、移開後是否停止。"], "C-1": ["確認可由 CIP SUPPLY 執行 FILL_VESSEL 且進量 ≥ 25 kg；之後以 PH401 把清洗液控到 20 °C 供後續測試。", "執行前後 CIP01（LI980）與 FE001（WE156）讀值、PH504 與 PH401 起訖時間、結束後 TE142 溫度。"], "C-2": ["確認溫度可控制到 50 °C（先啟動 PH411 與 PH402 400 rpm）。", "起始溫度、Phase 啟動時間、TE142 首次到達 50 °C 的時間、Phase 結束時間。"], "C-3": ["CIP Recirculation：確認水溫可否由 50 °C 升到 60 °C 及所需時間；升溫超過 60 min 則中止並改設當下溫度重跑。之後以 PH304 吹除積水。", "HEAT 前後溫度、HEAT 時間、PH302 起訖時間與執行時間（自動計算）、PH304 起訖時間；附 batch report。"], "C-4": ["依 A-18 結果設定 CP01–CP05，測 CIP Once Through 執行時間與用水量；之後以 PH304 吹除積水。", "執行前後 AWFI level、PH301 起訖時間、XV-702 下游至不再滴水的秒數、PH304 起訖時間。"], "C-5": ["確認 Final Rinse 能否達允收標準（Final Conductivity 1 μS/cm），並記錄用水量。", "執行前後 AWFI level、PH303 起訖時間、Step 293 與 Step 330 是否通過；附 Phase Report。"], "C-6": ["測試除 CP04 外各 Airblow 時間應設多久：各 Step 計時至對應位置不再有清水滴落。", "各 Step（110–240）至無水滴的秒數、Phase 起訖時間。"], "C-7": ["Gas filter 獨立 SIP（ESIP、FSIP 已含 Gas filter，PH107 平時不需單獨執行）。", "Phase 與 HEAT 時間（HEAT Duration 自動計算）、TE506 ≥ 121.0 °C 是否超過 15 min、附 Pulse Valve Timing Table。"], "D-1": ["確認壓力可正常控制：PH403 PP01 由 0.2 改 0.5 bar；完成後 PH411、PH410、PH403、PH406 不要停，供後續測試。", "兩個設定下的 PIC150 壓力與 FIC568 空氣流量。"], "D-2": ["確認 O2 流量可正常控制：PH407 PP01 由 50 改 100 slpm，結束後停止 PH407。", "兩個設定下的 PIC150 壓力、FIC568 空氣流量、FIC598 O2 流量。"], "D-3": ["確認 F-600 排氣中時，F-610 可否進行 SIP（PH403 PP03 = 0）。", "Phase 與 HEAT 時間（HEAT Duration 自動計算）、TE620／TE616 ≥ 121.0 °C 是否超過 15 min、附 Pulse Valve Timing Table。"], "D-4": ["確認 F-610 排氣中時，F-600 可否進行 SIP（PH403 PP03 = 1）。", "Phase 與 HEAT 時間（HEAT Duration 自動計算）、TE625／TE606 ≥ 121.0 °C 是否超過 15 min、附 Pulse Valve Timing Table。"]};
+
+/* ---------- 重測（Copy）：A-6 → A-6-2、A-6-3… ---------- */
+const INST={};
+const COPY_RE=/^([A-D]-\d+)-(\d+)$/;
+function baseOf(id){ const m=COPY_RE.exec(id); return m&&TMAP[m[1]]?m[1]:id; }
+function copyNoOf(id){ const m=COPY_RE.exec(id); return m&&TMAP[m[1]]?+m[2]:0; }
+function copiesOf(bid){ return (S.copies[bid]||[]).slice().sort((a,b)=>a-b); }
+function getT(id){
+  if(TMAP[id]) return TMAP[id];
+  const b=baseOf(id), n=copyNoOf(id);
+  if(!n||!copiesOf(b).includes(n)) return null;
+  if(!INST[id]) INST[id]=Object.assign({},TMAP[b],{id,base:b,copyNo:n,name:`${TMAP[b].name}（重測 ${n}）`});
+  return INST[id];
+}
+function makeInst(id){ const b=baseOf(id), n=copyNoOf(id); return n?Object.assign({},TMAP[b],{id,base:b,copyNo:n,name:`${TMAP[b].name}（重測 ${n}）`}):TMAP[id]; }
+function familyIds(bid){ return [bid,...copiesOf(bid).map(n=>`${bid}-${n}`)]; }
+function allTests(){ return DATA.flatMap(t=>familyIds(t.id).map(getT)); }
+function mapKey(t,k){ return t&&t.base&&k.startsWith(t.base+"|")? t.id+k.slice(t.base.length):k; }
+
+function rowKey(t,ri){return `${t.id}|r${ri}`;}
+function fKey(t,ri,ci){return `${t.id}|r${ri}|c${ci}`;}
+function pKey(t,ti,pid){return `${t.id}|P${ti}|${pid}`;}
+const COND_SECS=[10,20,30,40,50,60,70,80,90,100,110,120];
+
+/* value of a param for calc: final setting if filled, else default */
+function paramVal(key){
+  const [tid,pt,pid]=key.split("|"); const t=getT(tid)||makeInst(tid); const ti=+pt.slice(1);
+  const fin=num(V(key)); if(!isNaN(fin)) return fin;
+  const row=t.params[ti]?.rows.find(r=>r.pid===pid); return row?num(row.def):NaN;
+}
+function durSec(a,b){const s=parseT(V(a)),e=parseT(V(b)); if(!s||!e) return null; return (e-s)/1000;}
+function fmtDur(sec,fmt){
+  const neg=sec<0; let x=Math.round(Math.abs(sec)); const sg=neg?"−":"";
+  const h=Math.floor(x/3600), m=Math.floor((x%3600)/60), s=x%60;
+  if(fmt==="hhmm") return `${sg}${pad(h)}:${pad(m)} <small>(${pad(h)}:${pad(m)}:${pad(s)})</small>`;
+  if(fmt==="mmss") return `${sg}${pad(Math.floor(x/60))}:${pad(s)}`;
+  if(fmt==="hms") return `${sg}${pad(h)}:${pad(m)}:${pad(s)}`;
+  if(fmt==="min") return `${sg}${(Math.abs(sec)/60).toFixed(1)} min`;
+  return String(sec);
+}
+function fmtDurPlain(sec,fmt){ return fmtDur(sec,fmt).replace(/ <small>\((.*)\)<\/small>/," ($1)"); }
+
+/* returns {html, text, ok} */
+function evalCalc(c,t){
+  const mk=k=>mapKey(t,k);
+  if(c.dur){
+    const sec=durSec(mk(c.dur[0]),mk(c.dur[1]));
+    if(sec==null) return {ok:false};
+    return {ok:true, bad:sec<0, html:fmtDur(sec,c.fmt)+(sec<0?' <small>結束早於開始</small>':''), text:fmtDurPlain(sec,c.fmt)};
+  }
+  const vals={};
+  for(const [k,src] of Object.entries(c.vars)){
+    let v;
+    if(typeof src==="number") v=src;
+    else if(typeof src==="object" && src.dur){ const s=durSec(mk(src.dur[0]),mk(src.dur[1])); v=s==null?NaN:s/60; }
+    else if(src.startsWith("P:")) v=paramVal(mk(src.slice(2)));
+    else v=num(V(mk(src)));
+    if(isNaN(v)) return {ok:false};
+    vals[k]=v;
+  }
+  const names=Object.keys(vals), args=names.map(n=>vals[n]);
+  const htmlParts=[], textParts=[];
+  for(const p of c.parts){
+    let r; try{ r=Function(...names,`return (${p.expr});`)(...args);}catch(e){return {ok:false};}
+    if(p.yn){ htmlParts.push(`<span class="ynres ${r?'y':'n'}">${r?'Yes':'No'}</span>`); textParts.push(r?'Yes':'No'); continue; }
+    if(!isFinite(r)) return {ok:false};
+    let s=r.toFixed(p.dp); if(c.sign && r>0) s="+"+s; s=s.replace("-","−");
+    const u=p.unit?` ${p.unit}`:""; const l=p.label?`${p.label} `:"";
+    htmlParts.push(`${l}${s}<small>${esc(u)}</small>`); textParts.push(`${l}${s}${u}`);
+  }
+  const res={ok:true, html:htmlParts.join(" ／ "), text:textParts.join(" / ")};
+  if(c.parts.length===1 && !c.parts[0].yn){ res.plain=res.text.replace(/ [^ ]+$/, c.parts[0].unit?"":"$&").trim(); res.unit=c.parts[0].unit||""; }
+  return res;
+}
+
+/* ---------- progress ---------- */
+function fieldSubKeys(t,ri,ci,f){
+  const k=fKey(t,ri,ci);
+  if(f.type==="pulse") return [k+"|open",k+"|cycle"];
+  if(f.type==="cond") return [...COND_SECS.map(s=>k+"|s"+s),k+"|rinse"];
+  if(f.type==="d5") return [k+"|fe002",k+"|hose"];
+  if(f.type==="freeyn") return [k+"|name",k];
+  return [k];
+}
+function progress(t){
+  let tot=0,done=0;
+  t.rows.forEach((r,ri)=>{ if(r.t!=="item") return; r.cols.forEach((f,ci)=>{
+    if(f.type==="calc"||f.type==="freeyn") return;
+    tot++; if(fieldSubKeys(t,ri,ci,f).every(k=>V(k)!=="")) done++; }); });
+  return {tot,done};
+}
+
+
+/* ---------- FE001 無每日時程表：只用 Test 編號排序 ---------- */
+const SCHEDULE=[]; const PRINCIPLES=[]; const NOTES={}; const SCHED_VER="";
+function fmtMin(m){ m=String(m).trim(); const n=(m.match(/^\d+/)||[''])[0]; const mk=m.replace(/^\d+\s*/,''); if(!n) return `同時進行 ${mk}`; return `${n} min${mk?' '+mk:''}`; }
+const DAY_ORDER=[]; const DAY_OF={};
+SCHEDULE.forEach(d=>d.tests.forEach(([id,min,outline],i)=>{ DAY_OF[id]={day:d.day,pos:i+1,n:d.tests.length,min,outline}; DAY_ORDER.push(id); }));
+function dayOrderAll(){ return DAY_ORDER.flatMap(familyIds); }
+function idOrderAll(){ return DATA.flatMap(t=>familyIds(t.id)); }
+const VIEW_KEY="fe001_pretest_view";
+let VIEW="id";
+function setView(v){ VIEW=v; try{localStorage.setItem(VIEW_KEY,v);}catch(e){} renderHome(); }
+
+
+/* ---------- 附件（IndexedDB） ---------- */
+const IDB_NAME="fe001_pretest_files", IDB_STORE="files";
+let _db=null;
+function idb(){ if(_db) return Promise.resolve(_db);
+  return new Promise((res,rej)=>{ const r=indexedDB.open(IDB_NAME,1);
+    r.onupgradeneeded=()=>{ const st=r.result.createObjectStore(IDB_STORE,{keyPath:"id"}); st.createIndex("tid","tid"); };
+    r.onsuccess=()=>{_db=r.result;res(_db);}; r.onerror=()=>rej(r.error); }); }
+function idbReq(mode,fn){ return idb().then(db=>new Promise((res,rej)=>{ const tx=db.transaction(IDB_STORE,mode); const st=tx.objectStore(IDB_STORE);
+  const out=fn(st); tx.oncomplete=()=>res(out&&out.result!==undefined?out.result:out); tx.onerror=()=>rej(tx.error); tx.onabort=()=>rej(tx.error||new Error("寫入失敗")); })); }
+const attAll=()=>idbReq("readonly",st=>st.getAll());
+const attOf=tid=>idbReq("readonly",st=>st.index("tid").getAll(tid)).then(a=>a.sort((x,y)=>x.seq-y.seq));
+const attPut=rec=>idbReq("readwrite",st=>st.put(rec));
+const attDel=id=>idbReq("readwrite",st=>st.delete(id));
+async function attDelTest(tid){ const a=await attOf(tid); for(const r of a) await attDel(r.id); }
+const attClearAll=()=>idbReq("readwrite",st=>st.clear());
+let ATT_COUNT={};
+async function refreshAttCount(){ try{ const a=await attAll(); ATT_COUNT={}; a.forEach(r=>ATT_COUNT[r.tid]=(ATT_COUNT[r.tid]||0)+1); }catch(e){ ATT_COUNT={}; } }
+try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist(); }catch(e){}
+
+const IMG_MAX=2000, IMG_Q=0.85;
+function stamp(d){ d=d||new Date(); return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`; }
+function shrinkImage(file){
+  return new Promise(res=>{
+    const url=URL.createObjectURL(file); const img=new Image();
+    img.onload=()=>{ let w=img.naturalWidth,h=img.naturalHeight; const k=Math.min(1,IMG_MAX/Math.max(w,h)); w=Math.round(w*k); h=Math.round(h*k);
+      const c=document.createElement("canvas"); c.width=w; c.height=h; c.getContext("2d").drawImage(img,0,0,w,h);
+      c.toBlob(b=>{ URL.revokeObjectURL(url); res(b&&b.size<file.size?b:(file.type==="image/jpeg"?file:b||file)); },"image/jpeg",IMG_Q); };
+    img.onerror=()=>{ URL.revokeObjectURL(url); res(null); };
+    img.src=url; });
+}
+async function addFiles(tid,files){
+  const cur=await attOf(tid); let seq=cur.reduce((m,r)=>Math.max(m,r.seq),0);
+  let n=0;
+  for(const f of files){
+    seq++; const now=new Date(); let blob=f, type=f.type||"application/octet-stream", ext=(f.name.match(/\.([A-Za-z0-9]{1,6})$/)||[,"bin"])[1].toLowerCase();
+    if(/^image\//.test(type) && !/svg|gif/.test(type)){ const b=await shrinkImage(f); if(b){ blob=b; type="image/jpeg"; ext="jpg"; } }
+    const rec={id:`${tid}#${seq}#${now.getTime()}`, tid, seq, name:`${tid}_${pad(seq)}_${stamp(now)}.${ext}`, orig:f.name, type, size:blob.size, added:fmtDate(now), caption:"", blob};
+    try{ await attPut(rec); n++; }catch(e){ toast("附件儲存失敗：手機儲存空間不足"); break; }
+  }
+  return n;
+}
+function fmtSize(b){ return b>=1048576?(b/1048576).toFixed(1)+" MB":Math.max(1,Math.round(b/1024))+" KB"; }
+
+/* ---------- ZIP（不壓縮，免外部函式庫，離線可用） ---------- */
+const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+function crc32(u8){ let c=0xFFFFFFFF; for(let i=0;i<u8.length;i++) c=CRC_T[(c^u8[i])&0xFF]^(c>>>8); return (c^0xFFFFFFFF)>>>0; }
+async function makeZip(entries){ // [{name, blob}]
+  const enc=new TextEncoder(); const parts=[], central=[]; let off=0;
+  const d=new Date(); const dt=((d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1))&0xFFFF, dd=(((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate())&0xFFFF;
+  for(const e of entries){
+    const data=new Uint8Array(await e.blob.arrayBuffer()); const nm=enc.encode(e.name); const crc=crc32(data);
+    const lh=new DataView(new ArrayBuffer(30));
+    lh.setUint32(0,0x04034b50,true); lh.setUint16(4,20,true); lh.setUint16(6,0x0800,true); lh.setUint16(8,0,true);
+    lh.setUint16(10,dt,true); lh.setUint16(12,dd,true); lh.setUint32(14,crc,true); lh.setUint32(18,data.length,true); lh.setUint32(22,data.length,true);
+    lh.setUint16(26,nm.length,true); lh.setUint16(28,0,true);
+    parts.push(lh.buffer,nm,data);
+    const ch=new DataView(new ArrayBuffer(46));
+    ch.setUint32(0,0x02014b50,true); ch.setUint16(4,20,true); ch.setUint16(6,20,true); ch.setUint16(8,0x0800,true); ch.setUint16(10,0,true);
+    ch.setUint16(12,dt,true); ch.setUint16(14,dd,true); ch.setUint32(16,crc,true); ch.setUint32(20,data.length,true); ch.setUint32(24,data.length,true);
+    ch.setUint16(28,nm.length,true); ch.setUint32(42,off,true);
+    central.push(ch.buffer,nm);
+    off+=30+nm.length+data.length;
+  }
+  const csize=central.reduce((a,b)=>a+(b.byteLength),0);
+  const end=new DataView(new ArrayBuffer(22));
+  end.setUint32(0,0x06054b50,true); end.setUint16(8,entries.length,true); end.setUint16(10,entries.length,true); end.setUint32(12,csize,true); end.setUint32(16,off,true);
+  return new Blob([...parts,...central,end.buffer],{type:"application/zip"});
+}
+
+/* ---------- render: home ---------- */
+const app=document.getElementById("app");
+function topBar(inner){return `<div class="bar">${inner}<span class="ver">v${APP_VERSION}</span></div>`;}
+function testRow(t,sub){
+  const p=progress(t); const pct=p.tot?Math.round(p.done/p.tot*100):0;
+  return `<a class="trow ${t.copyNo?'copyrow':''}" href="#/${t.id}"><span class="plate">${t.id}</span><span class="nm">${esc(t.name)}${ATT_COUNT[t.id]?` <span class="clip">📎${ATT_COUNT[t.id]}</span>`:""}${sub?`<small class="sub">${sub}</small>`:""}</span>
+    <span class="prog ${p.done===p.tot&&p.tot?'full':''}">${p.done}/${p.tot}<i><b style="width:${pct}%"></b></i></span></a>`;
+}
+function renderHome(){
+  let h=topBar(`<h1>FE001 Pre-Test 紀錄</h1>`);
+  h+=`<main><div class="tools"><button class="btn pri" id="expz">匯出 ZIP（CSV＋附件）</button><button class="btn" id="exp">只匯出 CSV</button><button class="btn" id="imp">匯入 ZIP</button><input type="file" id="impIn" hidden></div>`;
+  if(VIEW==="day"){
+    h+=`<details class="rules"><summary>排程原則 G1–G6 ・ 執行注意事項 N1–N5</summary>
+      <div class="rh">排程原則</div>${PRINCIPLES.map(([k,t,d])=>`<div class="rl"><b>${k}</b><span><i>${esc(t)}</i>${esc(d)}</span></div>`).join("")}
+      <div class="rh">執行注意事項</div>${Object.entries(NOTES).map(([k,[t,d]])=>`<div class="rl"><b>${k}</b><span><i>${esc(t)}</i>${esc(d)}</span></div>`).join("")}
+    </details>`;
+    h+=`<div class="chips">${SCHEDULE.map(d=>{const done=d.tests.every(([id])=>familyIds(id).every(x=>{const p=progress(getT(x));return p.tot&&p.done===p.tot;}));return `<button class="chip ${done?'cfull':''}" data-jump="${d.day}">Day ${d.day}</button>`;}).join("")}</div>`;
+    for(const d of SCHEDULE){
+      h+=`<section class="day" id="day${d.day}"><div class="dayhd"><span class="dno">DAY ${d.day}</span><span class="dtt">${esc(d.title)}</span>
+          <span class="dmeta">${d.tests.length} 項 ・ ${d.min} min ・ ${d.ppl} 人</span></div>`;
+      if(d.notes.length) h+=`<div class="dnote">${d.notes.map(esc).join("<br>")}</div>`;
+      if(d.nref) h+=d.nref.map(k=>`<div class="nbox"><b>${k} ${esc(NOTES[k][0])}</b>${esc(NOTES[k][1])}</div>`).join("");
+      h+=`<div class="list">`;
+      d.tests.forEach(([id,min,outline],i)=>{ h+=testRow(TMAP[id],`<b>${i+1}.</b> 規劃 ${esc(fmtMin(min))} ・ ${esc(outline)}`);
+        copiesOf(id).forEach(n=>{ h+=testRow(getT(`${id}-${n}`),`↳ ${id} 的重測 ${n}`); }); });
+      h+=`</div></section>`;
+    }
+  } else {
+    const groups={A:[],B:[],C:[],D:[]}; allTests().forEach(t=>groups[t.id[0]].push(t));
+    h+=`<div class="proto">75 L Stainless Steel Fermenter（FE001，SSF-B53901）・ PDIC-024 V01 ・ 共 ${DATA.length} 個 Test</div>`;
+    for(const g of Object.keys(groups)){
+      h+=`<div class="grp">Test ${g}</div><div class="list">${groups[g].map(t=>testRow(t,t.copyNo?`↳ ${t.base} 的重測 ${t.copyNo}`:"")).join("")}</div>`;
+    }
+  }
+  h+=`<div class="foot">版本 v${APP_VERSION}${S.updated?` ・ 最後儲存 ${S.updated}`:""}<br>依 Study Protocol PDIC-024（Version 01）<br>資料與附件只存在這支手機的瀏覽器內，請每天匯出 ZIP 備份。<br><span id="usage"></span><br><br><button class="btn dng" id="rst">清除全部資料</button></div></main>`;
+  app.innerHTML=h;
+  document.getElementById("exp").onclick=()=>exportData(false);
+  document.getElementById("expz").onclick=()=>exportData(true);
+  const impIn=document.getElementById("impIn");
+  document.getElementById("imp").onclick=()=>impIn.click();
+  impIn.onchange=()=>{ const f=impIn.files[0]; impIn.value=""; if(f) importFile(f); };
+  document.getElementById("rst").onclick=async()=>{ if(confirm("確定清除全部 Test 的資料與附件？此動作無法復原，建議先匯出 ZIP。")){ S={values:{},copies:{},copySeq:{},updated:null}; save(); try{await attClearAll();}catch(e){} await refreshAttCount(); renderHome(); toast("已清除全部資料"); } };
+  if(navigator.storage&&navigator.storage.estimate) navigator.storage.estimate().then(e=>{ const el=document.getElementById("usage"); if(el&&e.usage!=null) el.textContent=`已使用儲存空間 ${fmtSize(e.usage)}`; }).catch(()=>{});
+  app.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>setView(b.dataset.view));
+  app.querySelectorAll("[data-jump]").forEach(b=>b.onclick=()=>document.getElementById("day"+b.dataset.jump).scrollIntoView({block:"start"}));
+  const back=sessionStorage.getItem("fe001_back"); sessionStorage.removeItem("fe001_back");
+  if(back){ const el=app.querySelector(`a.trow[href="#/${CSS.escape(back)}"]`); if(el){ el.scrollIntoView({block:"center"}); return; } }
+  window.scrollTo(0,0);
+}
+
+/* ---------- render: test ---------- */
+function renderField(t,ri,ci,f){
+  const k=fKey(t,ri,ci);
+  switch(f.type){
+    case "time": return `<div class="fld" data-time="${k}"></div>`;
+    case "num": return `<div class="fld urow"><input class="f n" inputmode="decimal" data-k="${k}" value="${esc(V(k))}">${f.unit?`<span class="unit">${esc(f.unit)}</span>`:""}</div>`;
+    case "text": return `<div class="fld"><input class="f" data-k="${k}" value="${esc(V(k))}"></div>`;
+    case "mmss": return `<div class="fld urow"><input class="f n" inputmode="numeric" placeholder="mm:ss" data-k="${k}" data-mmss value="${esc(V(k))}"><span class="unit">mm:ss（手動）</span></div>`;
+    case "yn": return ynHTML(k);
+    case "freeyn": return `<div class="fld"><input class="f" placeholder="參數名稱（自填）" data-k="${k}|name" value="${esc(V(k+"|name"))}"></div>${ynHTML(k)}`;
+    case "done": return `<button class="done ${V(k)?'on':''}" data-done="${k}">${V(k)?`✓ 完成 ${esc(V(k).slice(11))}`:"按此標記完成"}</button>`;
+    case "pulse": return `<div class="two">
+        <div class="urow"><span class="k">Open</span><input class="f n" inputmode="decimal" data-k="${k}|open" value="${esc(V(k+"|open"))}"><span class="unit">s</span></div>
+        <div class="urow"><span class="k">Cycle</span><input class="f n" inputmode="decimal" data-k="${k}|cycle" value="${esc(V(k+"|cycle"))}"><span class="unit">s</span></div></div>`;
+    case "d5": return `<div class="two">
+        <div><div class="k unit">FE002</div><div class="urow"><input class="f n" inputmode="decimal" data-k="${k}|fe002" value="${esc(V(k+"|fe002"))}"><span class="unit">°C</span></div></div>
+        <div><div class="k unit">Hose outlet</div><div class="urow"><input class="f n" inputmode="decimal" data-k="${k}|hose" value="${esc(V(k+"|hose"))}"><span class="unit">°C</span></div></div></div>`;
+    case "cond": return `<div class="cond">${COND_SECS.map(s=>`<label>${s}s (μS/cm)<input class="f n" inputmode="decimal" data-k="${k}|s${s}" value="${esc(V(k+"|s"+s))}"></label>`).join("")}</div><div class="urow rinse"><span class="k">Time to rinse to below 1 μS/cm</span><input class="f n" inputmode="decimal" data-k="${k}|rinse" value="${esc(V(k+"|rinse"))}"><span class="unit">s</span></div>`;
+    case "calc": return `<div class="calc" data-calc="${t.id}|${ri}|${ci}"></div>`;
+  }
+  return "";
+}
+function ynHTML(k){const v=V(k);return `<div class="yn" data-yn="${k}"><button class="y ${v==='Yes'?'on':''}" data-v="Yes">Yes</button><button class="n ${v==='No'?'on':''}" data-v="No">No</button></div>`;}
+
+function renderTest(t){
+  let h=topBar(`<button class="back" onclick="sessionStorage.setItem('fe001_back','${t.id}');location.hash='#/'">‹ 清單</button><h1><span class="tid">Test ${t.id}</span><span class="tname">${VIEW==="day"?`Day ${DAY_OF[baseOf(t.id)].day} ・ ${DAY_OF[baseOf(t.id)].pos}/${DAY_OF[baseOf(t.id)].n} ・ `:""}${esc(t.name)}</span></h1>`);
+  h+=`<main>`;
+  const pp=PURPOSE[baseOf(t.id)];
+  if(pp) h+=`<div class="purpose">${t.copyNo?`<div class="copytag">重測 ${t.copyNo}：依 ${esc(t.base)} 的程序重做（Parameter 已帶入建立時的設定值）</div>`:""}<div class="ph">測試目的</div><p>${esc(pp[0])}</p><div class="ph">主要記錄</div><p>${esc(pp[1])}</p></div>`;
+  if(VIEW==="day"){ const dd=DAY_OF[baseOf(t.id)]; const sd=SCHEDULE[dd.day-1]; h+=`<div class="dayinfo">Day ${dd.day} 第 ${dd.pos}/${dd.n} 項 ・ 規劃 ${esc(fmtMin(dd.min))}<br>${esc(dd.outline)}${(sd.nref||[]).map(k=>`<div class="nbox"><b>${k} ${esc(NOTES[k][0])}</b>${esc(NOTES[k][1])}</div>`).join("")}</div>`; }
+  if(t.params.length){
+    h+=`<h2 class="sec">Parameter Settings</h2>`;
+    t.params.forEach((p,ti)=>{
+      h+=`<div class="ptab"><div class="cap"><span>${esc(p.label||t.name)}</span><button class="btn" data-alldef="${ti}">全部同預設</button></div>`;
+      p.rows.forEach(r=>{
+        const k=pKey(t,ti,r.pid); const v=V(k); const changed=v!==""&&v.trim()!==r.def.trim();
+        h+=`<div class="prow ${changed?'changed':''}" data-prow="${k}"><span class="pid">${esc(r.pid)}</span><span class="pd">${esc(r.desc)}${r.unit&&r.unit!=="#"?` <small>(${esc(r.unit)})</small>`:""}</span>
+          <div class="pf"><span class="def">Default <b>${esc(r.def)}</b></span>
+          <input class="f n" inputmode="decimal" placeholder="Final" data-k="${k}" data-def="${esc(r.def)}" value="${esc(v)}">
+          <button class="mini" data-setdef="${k}">同預設</button></div></div>`;
+      });
+      h+=`</div>`;
+    });
+    if(t.ref){ h+=`<div class="ptab"><div class="cap"><span>${esc(t.ref.title)}</span></div><table class="reftab">${t.ref.rows.map((r,i)=>`<tr>${r.map(c=>i?`<td>${esc(c)}</td>`:`<th>${esc(c)}</th>`).join("")}</tr>`).join("")}</table></div>`; }
+  }
+  h+=`<h2 class="sec">Data Record Sheet</h2>`;
+  t.rows.forEach((r,ri)=>{
+    if(r.t==="sec"){ h+=`<div class="secbar">${esc(r.text)}</div>`; return; }
+    if(r.t==="gap"){ h+=`<div class="gap"></div>`; return; }
+    const nk=rowKey(t,ri)+"|note"; const nv=V(nk);
+    h+=`<div class="item"><div class="lab"><span class="no">${esc(r.no)}</span><span class="t">${esc(r.name||"（自填參數）")}</span>${r.note?`<button class="notebtn ${nv?'has':''}" data-note="${nk}">${nv?'備註 ●':'＋備註'}</button>`:""}</div>`;
+    r.cols.forEach((f,ci)=>{ if(f.h) h+=`<div class="colh">${esc(f.h)}</div>`; h+=renderField(t,ri,ci,f); });
+    if(r.note) h+=`<div class="note" data-notebox="${nk}" ${nv?"":"hidden"}><input class="f" placeholder="Note" data-k="${nk}" value="${esc(nv)}"></div>`;
+    h+=`</div>`;
+  });
+  const ck=`${t.id}|comments`;
+  h+=`<h2 class="sec">Attachments 附件</h2><div class="att" id="att"><div class="attgrid" id="attgrid"><div class="unit">載入中…</div></div>
+    <div class="attbtns"><label class="btn pri attadd">＋ 加入照片／檔案<input type="file" id="attin" multiple hidden></label><button class="btn" id="attshare">分享此 Test 附件</button></div>
+    <div class="unit attnote">照片會自動縮到長邊 ${IMG_MAX} px（JPEG）以節省手機空間；其他檔案原樣保存。</div></div>`;
+  h+=`<h2 class="sec">Comments</h2><textarea class="f" data-k="${ck}">${esc(V(ck))}</textarea>`;
+  let prev,next;
+  { const ord=VIEW==="day"?dayOrderAll():idOrderAll(); const i=ord.indexOf(t.id); prev=getT(ord[i-1]); next=getT(ord[i+1]); }
+  const navLab=x=>VIEW==="day"&&DAY_OF[baseOf(x.id)].day!==DAY_OF[baseOf(t.id)].day?`Day ${DAY_OF[baseOf(x.id)].day} ${x.id}`:x.id;
+  h+=`<div class="nav">${prev?`<a class="btn" href="#/${prev.id}" style="text-align:center;text-decoration:none">‹ ${navLab(prev)}</a>`:"<span style='flex:1'></span>"}
+      ${next?`<a class="btn" href="#/${next.id}" style="text-align:center;text-decoration:none">${navLab(next)} ›</a>`:"<span style='flex:1'></span>"}</div>`;
+  h+=`<div class="nav"><button class="btn cpy" id="mkcopy">＋ 建立重測（複製一份空白表單）</button></div>`;
+  h+=`<div class="nav"><button class="btn dng" id="clr">清除此 Test 資料</button>${t.copyNo?`<button class="btn dng" id="delcopy">刪除此重測</button>`:""}</div>`;
+  h+=`<div class="foot">版本 v${APP_VERSION}</div></main>`;
+  app.innerHTML=h;
+
+  app.querySelectorAll("[data-time]").forEach(el=>renderTime(el));
+  refreshCalcs(t);
+  renderAtt(t);
+  document.getElementById("attin").onchange=async e=>{ const fs=[...e.target.files]; e.target.value=""; if(!fs.length) return;
+    toast(`處理 ${fs.length} 個檔案中…`); const n=await addFiles(t.id,fs); await refreshAttCount(); renderAtt(t); if(n) toast(`已加入 ${n} 個附件`); };
+  document.getElementById("attshare").onclick=()=>shareAtt(t);
+  bindTest(t);
+  window.scrollTo(0,0);
+}
+
+function renderTime(el,editing){
+  const k=el.dataset.time, v=V(k);
+  let h=`<div class="tv ${v?'':'empty'}">${v?esc(v):"尚未填入"}</div>`;
+  if(editing){
+    const d=parseT(v)||new Date(); const ds=fmtDate(d);
+    h+=`<div class="ted"><div><label>日期</label><input class="f" type="date" data-ed="d" value="${ds.slice(0,10)}"></div>
+        <div><label>時間 (時:分:秒)</label><input class="f n" inputmode="numeric" data-ed="t" placeholder="HH:MM:SS" value="${ds.slice(11)}"></div>
+        <div class="ok"><button class="btn pri" data-act="ok">確定</button><button class="btn" data-act="cancel">取消</button></div></div>`;
+  } else {
+    h+=`<div class="tbtns"><button class="now" data-act="now">填入現在時間</button><button data-act="edit">自訂時間</button><button data-act="clear">清除</button></div>`;
+  }
+  el.innerHTML=h;
+}
+function normTime(s){
+  const dg=(s||"").replace(/\D/g,"");
+  let hh,mm,ss;
+  if(/^\d{1,2}:\d{1,2}(:\d{1,2})?$/.test(s.trim())){ [hh,mm,ss="0"]=s.trim().split(":"); }
+  else if(dg.length===6){hh=dg.slice(0,2);mm=dg.slice(2,4);ss=dg.slice(4);}
+  else if(dg.length===4){hh=dg.slice(0,2);mm=dg.slice(2);ss="0";}
+  else return null;
+  hh=+hh;mm=+mm;ss=+ss; if(hh>23||mm>59||ss>59) return null;
+  return `${pad(hh)}:${pad(mm)}:${pad(ss)}`;
+}
+
+function refreshCalcs(t){
+  app.querySelectorAll("[data-calc]").forEach(el=>{
+    const [ri,ci]=el.dataset.calc.split("|").slice(-2); const f=t.rows[+ri].cols[+ci];
+    const r=evalCalc(f.calc,t);
+    el.innerHTML=`<div class="val ${r.ok?(r.bad?'bad':''):'pend'}">${r.ok?r.html:"— 待相關欄位填入"}</div><div class="fx">自動計算：${esc(f.calc.desc)}</div>`;
+  });
+}
+function refreshParamRow(k){
+  const row=app.querySelector(`[data-prow="${CSS.escape(k)}"]`); if(!row) return;
+  const inp=row.querySelector("input"); const v=V(k);
+  row.classList.toggle("changed", v!=="" && v.trim()!==inp.dataset.def.trim());
+}
+
+function bindTest(t){
+  app.oninput=e=>{
+    const el=e.target; const k=el.dataset.k; if(!k) return;
+    if(el.hasAttribute("data-mmss")) return;
+    setV(k,el.value); if(k.includes("|P")) refreshParamRow(k); refreshCalcs(t);
+  };
+  app.onchange=e=>{
+    const el=e.target; if(el.hasAttribute&&el.hasAttribute("data-mmss")){
+      const v=el.value.trim(); const dg=v.replace(/\D/g,"");
+      let out=v; if(/^\d+:\d{1,2}$/.test(v)){const [m,s]=v.split(":"); out=`${pad(+m)}:${pad(+s)}`;} else if(dg.length>=3&&dg.length<=5&&!v.includes(":")){out=`${pad(+dg.slice(0,-2))}:${dg.slice(-2)}`;}
+      el.value=out; setV(el.dataset.k,out);
+    }
+  };
+  app.onclick=e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    const te=b.closest("[data-time]");
+    if(te){ const k=te.dataset.time, act=b.dataset.act;
+      if(act==="now"){ setV(k,nowStr()); renderTime(te); refreshCalcs(t); }
+      else if(act==="edit"){ renderTime(te,true); }
+      else if(act==="clear"){ if(!V(k)||confirm("清除這個時間？")){ setV(k,""); renderTime(te); refreshCalcs(t);} }
+      else if(act==="cancel"){ renderTime(te); }
+      else if(act==="ok"){ const d=te.querySelector('[data-ed="d"]').value; const tm=normTime(te.querySelector('[data-ed="t"]').value);
+        if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){toast("請選擇日期");return;}
+        if(!tm){toast("時間格式：HH:MM:SS，例如 14:05:30 或 140530");return;}
+        setV(k,`${d} ${tm}`); renderTime(te); refreshCalcs(t); }
+      return; }
+    const yn=b.closest("[data-yn]");
+    if(yn){ const k=yn.dataset.yn; const v=b.dataset.v; setV(k, V(k)===v?"":v);
+      yn.querySelectorAll("button").forEach(x=>x.classList.toggle("on",V(k)===x.dataset.v)); return; }
+    if(b.dataset.done){ const k=b.dataset.done;
+      if(V(k)){ if(!confirm("取消完成標記？")) return; setV(k,""); b.classList.remove("on"); b.textContent="按此標記完成"; }
+      else { const n=nowStr(); setV(k,n); b.classList.add("on"); b.textContent=`✓ 完成 ${n.slice(11)}`; }
+      return; }
+    if(b.dataset.note){ const box=app.querySelector(`[data-notebox="${CSS.escape(b.dataset.note)}"]`); box.hidden=!box.hidden; if(!box.hidden) box.querySelector("input").focus(); return; }
+    if(b.dataset.setdef){ const k=b.dataset.setdef; const inp=app.querySelector(`input[data-k="${CSS.escape(k)}"]`); inp.value=inp.dataset.def; setV(k,inp.value); refreshParamRow(k); refreshCalcs(t); return; }
+    if(b.dataset.alldef!==undefined){ const ti=b.dataset.alldef;
+      t.params[+ti].rows.forEach(r=>{ const k=pKey(t,ti,r.pid); if(V(k)==="") { setV(k,r.def); const inp=app.querySelector(`input[data-k="${CSS.escape(k)}"]`); if(inp) inp.value=r.def; refreshParamRow(k);} });
+      refreshCalcs(t); toast("空白欄已帶入預設值"); return; }
+    if(b.id==="mkcopy"){ createCopy(t); return; }
+    if(b.id==="delcopy"){ deleteCopy(t); return; }
+    if(b.id==="clr"){ if(confirm(`確定清除 Test ${t.id} 的全部資料與附件？`)){ Object.keys(S.values).forEach(k=>{ if(k.startsWith(t.id+"|")) delete S.values[k]; }); save(); attDelTest(t.id).then(refreshAttCount).then(()=>renderTest(t)); toast(`已清除 Test ${t.id}`);} }
+  };
+  app.onfocusout=(e=>{ const el=e.target; if(el.dataset&&el.dataset.k&&el.dataset.k.endsWith("|note")){ const btn=app.querySelector(`[data-note="${CSS.escape(el.dataset.k)}"]`); if(btn){ btn.classList.toggle("has",!!el.value); btn.textContent=el.value?"備註 ●":"＋備註"; } } });
+}
+
+
+let ATT_URLS=[];
+async function renderAtt(t){
+  const g=document.getElementById("attgrid"); if(!g) return;
+  ATT_URLS.forEach(u=>URL.revokeObjectURL(u)); ATT_URLS=[];
+  let a=[]; try{ a=await attOf(t.id); }catch(e){ g.innerHTML=`<div class="unit">此瀏覽器無法使用附件儲存</div>`; return; }
+  if(!a.length){ g.innerHTML=`<div class="unit">尚無附件</div>`; return; }
+  g.innerHTML=a.map(r=>{ const isImg=/^image\//.test(r.type); let u=""; if(isImg){ u=URL.createObjectURL(r.blob); ATT_URLS.push(u); }
+    return `<button class="thumb" data-att="${esc(r.id)}">${isImg?`<img src="${u}" alt="">`:`<span class="fic">${esc((r.name.split(".").pop()||"").toUpperCase())}</span>`}
+      <span class="tcap">${esc(r.caption||`#${r.seq} ・ ${r.added.slice(5,16)}`)}</span></button>`; }).join("");
+  g.querySelectorAll("[data-att]").forEach(b=>b.onclick=()=>openAtt(t,a.find(r=>r.id===b.dataset.att)));
+}
+function openAtt(t,r){
+  const u=URL.createObjectURL(r.blob); const isImg=/^image\//.test(r.type);
+  const ov=document.createElement("div"); ov.className="viewer";
+  ov.innerHTML=`<div class="vbar"><button class="btn" data-x>關閉</button><span class="vname">${esc(r.name)}</span></div>
+    <div class="vbody">${isImg?`<img src="${u}" alt="">`:`<a class="btn pri" href="${u}" target="_blank" rel="noopener">開啟檔案</a>`}</div>
+    <div class="vfoot"><input class="f" placeholder="說明（會寫入匯出 CSV）" value="${esc(r.caption)}" data-cap>
+      <div class="vmeta">${fmtSize(r.size)} ・ 加入 ${esc(r.added)}${r.orig?` ・ 原檔名 ${esc(r.orig)}`:""}</div>
+      <button class="btn dng" data-del>刪除此附件</button></div>`;
+  document.body.appendChild(ov); document.body.style.overflow="hidden";
+  const close=async()=>{ const cap=ov.querySelector("[data-cap]").value; if(cap!==r.caption){ r.caption=cap; try{await attPut(r);}catch(e){} }
+    URL.revokeObjectURL(u); ov.remove(); document.body.style.overflow=""; renderAtt(t); };
+  ov.querySelector("[data-x]").onclick=close;
+  ov.querySelector("[data-del]").onclick=async()=>{ if(!confirm("刪除這個附件？")) return; await attDel(r.id); URL.revokeObjectURL(u); ov.remove(); document.body.style.overflow=""; await refreshAttCount(); renderAtt(t); toast("已刪除附件"); };
+}
+async function shareAtt(t){
+  const a=await attOf(t.id); if(!a.length){ toast("此 Test 沒有附件"); return; }
+  const files=a.map(r=>new File([r.blob],r.name,{type:r.type}));
+  offerFile(files,`Test ${t.id} 附件 ${a.length} 個`);
+}
+
+
+/* ---------- 建立／刪除重測 ---------- */
+function createCopy(t){
+  const b=t.base||t.id; const used=copiesOf(b); const n=Math.max(S.copySeq[b]||1,...used,1)+1;
+  if(!confirm(`建立 ${b}-${n}（${b} 的重測 ${n}）？\n\nParameter Settings 會帶入本頁目前的 Final Setting 值；其餘欄位、附件與 Comments 為空白。`)) return;
+  S.copies[b]=[...used,n]; S.copySeq[b]=n;
+  const nt=getT(`${b}-${n}`);
+  t.params.forEach((p,ti)=>p.rows.forEach(r=>{ const v=V(pKey(t,ti,r.pid)); if(v!=="") S.values[pKey(nt,ti,r.pid)]=v; }));
+  save(); toast(`已建立 ${nt.id}`); location.hash=`#/${nt.id}`;
+}
+function deleteCopy(t){
+  if(!confirm(`刪除 ${t.id}（${t.base} 的重測 ${t.copyNo}）？\n此重測的所有紀錄與附件都會刪除，無法復原。`)) return;
+  Object.keys(S.values).forEach(k=>{ if(k.startsWith(t.id+"|")) delete S.values[k]; });
+  S.copies[t.base]=copiesOf(t.base).filter(x=>x!==t.copyNo); if(!S.copies[t.base].length) delete S.copies[t.base];
+  delete INST[t.id]; save();
+  attDelTest(t.id).then(refreshAttCount).then(()=>{ toast(`已刪除 ${t.id}`); location.hash=`#/${t.base}`; });
+}
+
+/* ---------- 匯入 ZIP（整份取代，交接用） ---------- */
+/* ---------- CSV ---------- */
+function parseCSV(text){
+  if(text.charCodeAt(0)===0xFEFF) text=text.slice(1);
+  const rows=[]; let row=[], f="", q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){f+='"';i++;} else q=false; } else f+=c; continue; }
+    if(c==='"') q=true;
+    else if(c===','){ row.push(f); f=""; }
+    else if(c==='\n'){ row.push(f); rows.push(row); row=[]; f=""; }
+    else if(c==='\r'){}
+    else f+=c;
+  }
+  if(f!==""||row.length){ row.push(f); rows.push(row); }
+  return rows;
+}
+function buildRecord(text,fileName){
+  const rows=parseCSV(text);
+  const hi=rows.findIndex(r=>r[0]==="Test ID");
+  if(hi<0) throw new Error("找不到標題列「Test ID」，這不是 FE001 Pre-Test 匯出的 CSV");
+  const H=rows[hi]; const ix=n=>H.indexOf(n);
+  const I={id:ix("Test ID"),name:ix("Test Name"),cat:ix("類別"),sec:ix("區段"),no:ix("Item No."),item:ix("項目"),sub:ix("子欄"),def:ix("Default Value"),val:ix("值"),unit:ix("單位"),fx:ix("自動計算公式"),note:ix("Note")};
+  const m0=rows[0]||[]; const meta={file:fileName, app:m0[2]||"", exported:m0[4]||""};
+  const tests=new Map(), order=[];
+  for(const r of rows.slice(hi+1)){
+    if(!r[I.id]) continue;
+    const id=r[I.id];
+    if(!tests.has(id)){ tests.set(id,{id,name:r[I.name],params:[],data:[],comments:"",atts:[]}); order.push(id); }
+    const t=tests.get(id); const o={sec:r[I.sec],no:r[I.no],item:r[I.item],sub:r[I.sub],def:r[I.def],val:r[I.val],unit:r[I.unit],fx:r[I.fx],note:r[I.note]};
+    if(r[I.cat]==="Parameter Settings") t.params.push(o);
+    else if(r[I.cat]==="Data Record Sheet") t.data.push(o);
+    else if(r[I.cat]==="Comments") t.comments=o.val;
+    else if(r[I.cat]==="Attachment") t.atts.push(o);
+  }
+  for(const t of tests.values()){
+    /* 計數方式與手機 App 相同：Open/Cycle、導電度 10s–120s、FE002/Hose outlet 這類複合欄算一格，全部填完才算完成 */
+    const COMP=/^(Open|Cycle|\d+s|Time to rinse to below 1 μS\/cm)$/; let tot=0,done=0;
+    for(let i=0;i<t.data.length;){ const o=t.data[i]; let j=i+1;
+      if(COMP.test(o.sub)) while(j<t.data.length&&t.data[j].item===o.item&&t.data[j].no===o.no&&t.data[j].sec===o.sec&&COMP.test(t.data[j].sub)) j++;
+      const g=t.data.slice(i,j); i=j;
+      if(o.fx||o.item==="（自填參數）") continue;
+      tot++; if(g.every(x=>x.val!=="")) done++; }
+    t.tot=tot; t.done=done;
+    t.chg=t.params.filter(p=>p.val!==""&&p.val.trim()!==p.def.trim()).length;
+    t.pfilled=t.params.filter(p=>p.val!=="").length;
+    t.any=t.done>0||t.pfilled>0||t.comments||t.atts.length>0;
+  }
+  return {meta,tests,order};
+}
+
+/* ---------- ZIP 讀取（支援未壓縮與 deflate） ---------- */
+async function readZip(buf){
+  const dv=new DataView(buf); const u8=new Uint8Array(buf);
+  let e=-1; for(let i=buf.byteLength-22;i>=Math.max(0,buf.byteLength-65557);i--){ if(dv.getUint32(i,true)===0x06054b50){e=i;break;} }
+  if(e<0) throw new Error("不是有效的 ZIP 檔");
+  const n=dv.getUint16(e+10,true); let p=dv.getUint32(e+16,true);
+  const dec=new TextDecoder("utf-8"); const out=[];
+  for(let k=0;k<n;k++){
+    if(dv.getUint32(p,true)!==0x02014b50) throw new Error("ZIP 目錄損毀");
+    const method=dv.getUint16(p+10,true), csz=dv.getUint32(p+20,true), nl=dv.getUint16(p+28,true), xl=dv.getUint16(p+30,true), cl=dv.getUint16(p+32,true), off=dv.getUint32(p+42,true);
+    const name=dec.decode(u8.subarray(p+46,p+46+nl)); p+=46+nl+xl+cl;
+    if(name.endsWith("/")) continue;
+    const lnl=dv.getUint16(off+26,true), lxl=dv.getUint16(off+28,true); const start=off+30+lnl+lxl;
+    const raw=u8.subarray(start,start+csz);
+    let blob;
+    if(method===0) blob=new Blob([raw]);
+    else if(method===8){ if(typeof DecompressionStream==="undefined") throw new Error("此瀏覽器無法解壓縮，請改用最新版 Chrome / Edge"); blob=await new Response(new Blob([raw]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).blob(); }
+    else { console.warn("略過不支援的壓縮方式",name,method); continue; }
+    out.push({name,blob});
+  }
+  return out;
+}
+const MIME={jpg:"image/jpeg",jpeg:"image/jpeg",png:"image/png",gif:"image/gif",webp:"image/webp",heic:"image/heic",pdf:"application/pdf",csv:"text/csv",txt:"text/plain"};
+const extOf=n=>(n.split(".").pop()||"").toLowerCase();
+
+
+function restoreFromCSV(text){
+  const rows=parseCSV(text);
+  const hi=rows.findIndex(r=>r[0]==="Test ID");
+  if(hi<0) throw new Error("找不到標題列「Test ID」，這不是本 App 匯出的 CSV");
+  const H=rows[hi]; const ix=n=>H.indexOf(n);
+  const I={id:ix("Test ID"),cat:ix("類別"),no:ix("Item No."),item:ix("項目"),sub:ix("子欄"),val:ix("值"),note:ix("Note")};
+  const m0=rows[0]||[];
+  const groups=new Map();
+  for(const r of rows.slice(hi+1)){ if(!r[I.id]) continue; if(!groups.has(r[I.id])) groups.set(r[I.id],[]); groups.get(r[I.id]).push(r); }
+  const values={}, copies={}, atts=[];
+  for(const [tid,list] of groups){
+    const b=baseOf(tid), n=copyNoOf(tid);
+    if(!TMAP[b]) throw new Error(`CSV 中的 Test「${tid}」不在本 App 中`);
+    if(n){ (copies[b]=copies[b]||[]).push(n); }
+    const t=makeInst(tid); const specs=rowSpecs(t);
+    const recs=list.filter(r=>r[I.cat]==="Parameter Settings"||r[I.cat]==="Data Record Sheet");
+    if(recs.length!==specs.length) throw new Error(`Test ${tid} 的欄位數（${recs.length}）與本 App（${specs.length}）不同，無法由 CSV 重建`);
+    specs.forEach((sp,i)=>{
+      const r=recs[i];
+      if(r[I.cat]!==sp.cat||r[I.sub]!==sp.sub||(sp.kind!=="free"&&r[I.item]!==sp.item)) throw new Error(`Test ${tid} 第 ${i+1} 列「${r[I.item]}」與本 App 欄位「${sp.item}」不符`);
+      const val=r[I.val]??"";
+      if(sp.kind==="v"&&val!=="") values[sp.key]=val;
+      else if(sp.kind==="done"&&val!=="") values[sp.key]=val.replace(/^完成\s*/,"");
+      else if(sp.kind==="free"){ if(r[I.item]&&r[I.item]!=="（自填參數）") values[sp.key+"|name"]=r[I.item]; if(val!=="") values[sp.key]=val; }
+      if(sp.noteKey&&r[I.note]) values[sp.noteKey]=r[I.note];
+    });
+    for(const r of list){
+      if(r[I.cat]==="Comments"&&r[I.val]) values[`${tid}|comments`]=r[I.val];
+      if(r[I.cat]==="Attachment"){ const nt=r[I.note]||""; atts.push({tid,seq:+r[I.no]||0,name:r[I.item],caption:r[I.val]||"",
+        added:(nt.match(/加入 (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/)||[,""])[1], orig:(nt.match(/原檔名 (.+)$/)||[,""])[1]}); }
+    }
+  }
+  const copySeq={}; for(const b in copies){ copies[b].sort((x,y)=>x-y); copySeq[b]=Math.max(...copies[b]); }
+  return {values,copies,copySeq,atts,meta:{app:m0[2]||"",exported:m0[4]||"",mode:"由 CSV 重建"}};
+}
+function summarize(values,atts){
+  const m={};
+  for(const k of Object.keys(values)){ const id=k.split("|")[0]; (m[id]=m[id]||{n:0,a:0}).n++; }
+  for(const a of atts){ (m[a.tid]=m[a.tid]||{n:0,a:0}).a++; }
+  return m;
+}
+function ask(title,html,okText,cancelText,warn){
+  return new Promise(res=>{
+    const ov=document.createElement("div"); ov.className="sheet";
+    ov.innerHTML=`<div class="sbox ${warn?"warnbox":""}"><div class="stitle">${title}</div><div class="smsg">${html}</div>
+      <button class="btn ${warn?"dngfill":"pri"}" data-ok>${okText}</button>${cancelText?`<button class="btn" data-x>${cancelText}</button>`:""}</div>`;
+    document.body.appendChild(ov);
+    ov.querySelector("[data-ok]").onclick=()=>{ ov.remove(); res(true); };
+    const x=ov.querySelector("[data-x]"); if(x) x.onclick=()=>{ ov.remove(); res(false); };
+  });
+}
+const idSort=(a,b)=>a.localeCompare(b,undefined,{numeric:true});
+async function importFile(file){
+  toast("讀取匯入檔中…");
+  let inc;
+  try{
+    const head=new Uint8Array(await file.slice(0,4).arrayBuffer());
+    if(head[0]===0x50&&head[1]===0x4B){
+      const ents=await readZip(await file.arrayBuffer());
+      const fmap={}; ents.forEach(e=>{ const bn=e.name.split("/").pop(); if(!/__MACOSX/.test(e.name)&&!bn.startsWith("._")) fmap[bn]=e.blob; });
+      const js=ents.find(e=>e.name.split("/").pop()===STATE_FILE);
+      if(js){
+        const st=JSON.parse(await js.blob.text());
+        if(st.format!=="fe001-pretest-state") throw new Error("ZIP 內的資料檔格式不符");
+        inc={values:st.values||{},copies:st.copies||{},copySeq:st.copySeq||{},atts:st.attachments||[],meta:{app:st.appVersion||"",exported:st.exported||"",mode:"完整還原"}};
+      } else {
+        const csv=ents.filter(e=>/\.csv$/i.test(e.name)&&!/__MACOSX/.test(e.name)).sort((a,b)=>a.name.split("/").length-b.name.split("/").length)[0];
+        if(!csv) throw new Error("ZIP 內找不到 CSV 紀錄檔");
+        inc=restoreFromCSV(await csv.blob.text());
+      }
+      inc.atts.forEach(a=>{ a.blob=fmap[a.name]||null; });
+    } else {
+      inc=restoreFromCSV(await file.text()); inc.atts.forEach(a=>a.blob=null);
+    }
+  }catch(e){ await ask("無法匯入",esc(e.message),"確定"); return; }
+
+  const missing=inc.atts.filter(a=>!a.blob).length;
+  inc.atts=inc.atts.filter(a=>a.blob);
+  let curAtts=[]; try{ curAtts=await attAll(); }catch(e){}
+  const cur=summarize(S.values,curAtts), nw=summarize(inc.values,inc.atts);
+  const lost=Object.keys(cur).filter(id=>{ const c=cur[id], n=nw[id]||{n:0,a:0}; return n.n<c.n||n.a<c.a; }).sort(idSort);
+  const incTests=Object.keys(nw).length;
+  const info=`<div class="kv">檔案：${esc(file.name)}<br>匯出時間：${esc(inc.meta.exported||"—")} ・ App ${esc(inc.meta.app||"—")}<br>有紀錄的 Test：${incTests} 個 ・ 附件 ${inc.atts.length} 個${missing?`（另有 ${missing} 個附件在 ZIP 中找不到）`:""}<br>匯入方式：${inc.meta.mode}</div>`;
+  let ok;
+  if(lost.length){
+    const lines=lost.slice(0,20).map(id=>{ const c=cur[id], n=nw[id]||{n:0,a:0}; return `<li><b>${esc(id)}</b>：手機 ${c.n} 項／附件 ${c.a} → 匯入檔 ${n.n} 項／附件 ${n.a}</li>`; }).join("");
+    ok=await ask("⚠ 匯入檔的資料比手機目前少",
+      `${info}<p>以下 Test 在這支手機上有較多紀錄，整份取代後這些紀錄會消失：</p><ul class="lost">${lines}${lost.length>20?`<li>…另有 ${lost.length-20} 個</li>`:""}</ul>
+       <p><b>請確認手上的壓縮檔是否正確</b>（例如是否為交接人最新匯出的檔案）。若不確定，請先取消，並先匯出這支手機的資料備份。</p>`,
+      "我已確認檔案正確，整份取代","取消，先確認檔案",true);
+  } else {
+    ok=await ask("匯入並取代手機資料？",`${info}<p>這支手機目前的紀錄與附件會整份被匯入檔取代。</p>`,"整份取代","取消");
+  }
+  if(!ok) return;
+
+  toast("匯入中…");
+  try{
+    S={values:inc.values,copies:inc.copies,copySeq:inc.copySeq,updated:null};
+    Object.keys(INST).forEach(k=>delete INST[k]);
+    save();
+    await attClearAll();
+    let i=0;
+    for(const a of inc.atts){ i++;
+      const type=a.type||MIME[extOf(a.name)]||"application/octet-stream"; const blob=a.blob.type===type?a.blob:new Blob([a.blob],{type});
+      await attPut({id:`${a.tid}#${a.seq}#${Date.now()}${i}`,tid:a.tid,seq:a.seq,name:a.name,orig:a.orig||"",type,size:blob.size,added:a.added||"",caption:a.caption||"",blob});
+    }
+  }catch(e){ await ask("匯入失敗",esc(e.message)+"<br>請重新匯入一次。","確定"); return; }
+  await refreshAttCount();
+  if(location.hash&&location.hash!=="#/") location.hash="#/"; else renderHome();
+  await ask("匯入完成",`已載入 ${incTests} 個 Test 的紀錄與 ${inc.atts.length} 個附件。<p><b>交接提醒：</b>原本那支手機請停止填寫，之後以這支手機為準，避免兩邊資料分岔。</p>`,"知道了");
+}
+
+/* ---------- export ---------- */
+function csvCell(s){ s=String(s??""); return /[",\n\r]/.test(s)?`"${s.replace(/"/g,'""')}"`:s; }
+/* 每個 Test 的匯出列規格：匯出 CSV 與「由 CSV 重建」共用，確保順序一致 */
+function rowSpecs(t){
+  const out=[];
+  t.params.forEach((p,ti)=>p.rows.forEach(r=>{
+    out.push({cat:"Parameter Settings",sec:p.label||"",no:"",item:`${r.pid} ${r.desc}`,sub:"",def:r.def,unit:r.unit,fx:"",noteKey:null,key:pKey(t,ti,r.pid),kind:"v"});
+  }));
+  let sec="";
+  t.rows.forEach((r,ri)=>{
+    if(r.t==="sec"){sec=r.text;return;} if(r.t==="gap"){sec="";return;}
+    const nk=rowKey(t,ri)+"|note";
+    r.cols.forEach((f,ci)=>{
+      const k=fKey(t,ri,ci);
+      const add=(sub,key,kind,unit,fx)=>out.push({cat:"Data Record Sheet",sec,no:r.no,item:r.name,sub:[f.h,sub].filter(Boolean).join(" "),def:"",unit:unit||"",fx:fx||"",noteKey:nk,key,kind,f});
+      if(f.type==="pulse"){ add("Open",k+"|open","v","s"); add("Cycle",k+"|cycle","v","s"); }
+      else if(f.type==="cond"){ COND_SECS.forEach(x=>add(`${x}s`,k+"|s"+x,"v","μS/cm")); add("Time to rinse to below 1 μS/cm",k+"|rinse","v","s"); }
+      else if(f.type==="d5"){ add("FE002",k+"|fe002","v","°C"); add("Hose outlet",k+"|hose","v","°C"); }
+      else if(f.type==="calc"){ add("",null,"calc","",f.calc.desc); }
+      else if(f.type==="done"){ add("",k,"done"); }
+      else if(f.type==="freeyn"){ add("",k,"free"); }
+      else add("",k,"v",f.unit);
+    });
+  });
+  return out;
+}
+async function buildCSV(atts,zipMode){
+  const L=[["FE001 Pre-Test 紀錄","App 版本",`v${APP_VERSION}`,"匯出時間",nowStr()],[],
+    ["Test ID","Test Name","類別","區段","Item No.","項目","子欄","Default Value","值","單位","自動計算公式","Note"]];
+  for(const t of allTests()){
+    for(const sp of rowSpecs(t)){
+      let val, unit=sp.unit, item=sp.item;
+      if(sp.kind==="calc"){ const c=evalCalc(sp.f.calc,t); if(c.ok&&c.plain!==undefined){ val=c.plain; unit=c.unit; } else { val=c.ok?c.text:""; unit=""; } }
+      else if(sp.kind==="done") val=V(sp.key)?`完成 ${V(sp.key)}`:"";
+      else val=V(sp.key);
+      if(sp.kind==="free") item=V(sp.key+"|name")||"（自填參數）";
+      L.push([t.id,t.name,sp.cat,sp.sec,sp.no,item,sp.sub,sp.def,val,unit,sp.fx,sp.noteKey?V(sp.noteKey):""]);
+    }
+    const cm=V(`${t.id}|comments`); if(cm) L.push([t.id,t.name,"Comments","","","","","",cm,"","",""]);
+    atts.filter(r=>r.tid===t.id).sort((x,y)=>x.seq-y.seq).forEach(r=>{
+      L.push([t.id,t.name,"Attachment",zipMode?`attachments/${t.id}/`:"（未含於 CSV）",r.seq,r.name,"","",r.caption,"","",`加入 ${r.added}；${fmtSize(r.size)}${r.orig?`；原檔名 ${r.orig}`:""}`]);
+    });
+  }
+  return "\uFEFF"+L.map(r=>r.map(csvCell).join(",")).join("\r\n");
+}
+const STATE_FILE="_fe001_app_state.json";
+function stateJSON(atts){
+  return JSON.stringify({format:"fe001-pretest-state",schema:1,appVersion:`v${APP_VERSION}`,exported:nowStr(),
+    values:S.values,copies:S.copies,copySeq:S.copySeq,
+    attachments:atts.map(r=>({tid:r.tid,seq:r.seq,name:r.name,orig:r.orig,type:r.type,size:r.size,added:r.added,caption:r.caption}))});
+}
+async function exportData(zipMode){
+  toast("準備匯出中…");
+  let atts=[]; try{ atts=await attAll(); }catch(e){}
+  const d=new Date(); const base=`FE001_PreTest_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}`;
+  const csv=await buildCSV(atts,zipMode);
+  const csvBlob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  if(!zipMode){ offerFile([new File([csvBlob],base+".csv",{type:"text/csv"})],`${base}.csv`); return; }
+  const entries=[{name:base+".csv",blob:csvBlob},{name:STATE_FILE,blob:new Blob([stateJSON(atts)],{type:"application/json"})}, ...atts.sort((x,y)=>x.tid.localeCompare(y.tid,undefined,{numeric:true})||x.seq-y.seq).map(r=>({name:`attachments/${r.tid}/${r.name}`,blob:r.blob}))];
+  let zip; try{ zip=await makeZip(entries); }catch(e){ toast("ZIP 產生失敗："+e.message); return; }
+  offerFile([new File([zip],base+".zip",{type:"application/zip"})],`${base}.zip（附件 ${atts.length} 個）`);
+}
+/* 準備好檔案後再按一次分享：iPhone 要求分享必須由點擊直接觸發 */
+function offerFile(files,label){
+  const total=files.reduce((a,f)=>a+f.size,0);
+  const ov=document.createElement("div"); ov.className="sheet";
+  ov.innerHTML=`<div class="sbox"><div class="stitle">已準備好匯出</div><div class="sname">${esc(label)}<br><small>${fmtSize(total)}</small></div>
+    <button class="btn pri" data-go>分享／儲存到「檔案」</button><button class="btn" data-dl>直接下載</button><button class="btn" data-x>取消</button></div>`;
+  document.body.appendChild(ov);
+  const close=()=>ov.remove();
+  ov.querySelector("[data-x]").onclick=close;
+  ov.querySelector("[data-dl]").onclick=()=>{ files.forEach((f,i)=>{ if(i===0) download(f,f.name); else setTimeout(()=>download(f,f.name),i*500); }); close(); };
+  const go=ov.querySelector("[data-go]");
+  if(!(navigator.canShare&&navigator.canShare({files}))) go.remove();
+  else go.onclick=()=>{ navigator.share({files}).then(close).catch(err=>{ if(err.name!=="AbortError") toast("分享失敗，請改用直接下載"); }); };
+}
+function download(blob,fn){ const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=fn; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},4000); toast("已下載 "+fn); }
+
+/* ---------- router ---------- */
+/* 記住最後停留的畫面與捲動位置；重新開啟時回到該處（不依開啟網址上的 #） */
+const LAST_KEY="fe001_pretest_last";
+function curId(){ return decodeURIComponent((location.hash||"").replace(/^#\/?/,"")); }
+function saveLast(){ try{ const id=curId(); localStorage.setItem(LAST_KEY,JSON.stringify({id:getT(id)?id:"",y:Math.round(window.scrollY)})); }catch(e){} }
+function route(){ const id=curId(); const t=getT(id); if(t) renderTest(t); else renderHome(); saveLast(); }
+window.addEventListener("hashchange",()=>{ refreshAttCount().then(route); });
+document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden") saveLast(); });
+window.addEventListener("pagehide",saveLast);
+let _st; window.addEventListener("scroll",()=>{ clearTimeout(_st); _st=setTimeout(saveLast,400); },{passive:true});
+(function start(){
+  let last={id:"",y:0}; try{ last=JSON.parse(localStorage.getItem(LAST_KEY))||last; }catch(e){}
+  const id=last.id&&getT(last.id)?last.id:"";
+  history.replaceState(null,"",location.pathname+location.search+(id?`#/${id}`:""));
+  refreshAttCount().then(()=>{ route(); if(last.y>0) setTimeout(()=>window.scrollTo(0,last.y),60); });
+})();
+</script>
+</body>
+</html>
